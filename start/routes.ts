@@ -27,3 +27,5 @@ Route.group(() => {
     Route.get(':provider/callback', 'AuthController.authorize').as('authorize')
   }).prefix('oauth2').as('oauth2');
 }).prefix('auth').as('authentification');
+
+Route.get('statistics', 'StatsController.get').as('statistic');
