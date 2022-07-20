@@ -15,8 +15,6 @@ export default class TestimonialController {
     }
 
     async store({ request, response, auth }) {
-        const data = request.only(['message'])
-
         const newTestimonial = schema.create({
             message: schema.string([
                 rules.required(),
