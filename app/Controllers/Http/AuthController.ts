@@ -1,6 +1,7 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-import User from "App/Models/User"
+import User from "App/Models/User";
+import axios from 'axios';
 
 export default class AuthController {
     public async redirect ({ ally, request }) {
@@ -59,8 +60,20 @@ export default class AuthController {
             expiresIn: '7days'
         })
 
+        /**
+         * Get user guilds owned
+         */
+        const { data } = await axios.get('https://discord.com/api/v8/users/@me/guilds', {
+            headers: {
+                Authorization: 'Bearer ' + user.token.token
+            }
+        })
+        // @ts-ignore
+        const guilds = data.filter(guild => guild.owner)
+
         return {
             user: dbUser,
+            guilds,
             token
         }
     }
