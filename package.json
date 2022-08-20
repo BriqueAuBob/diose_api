@@ -20,8 +20,10 @@
   "dependencies": {
     "@adonisjs/ally": "^4.1.4",
     "@adonisjs/auth": "^8.2.1",
-    "@adonisjs/core": "^5.8.4",
+    "@adonisjs/core": "^5.8.6",
+    "@adonisjs/limiter": "^1.0.1",
     "@adonisjs/lucid": "^18.1.0",
+    "@adonisjs/redis": "^7.3.1",
     "@adonisjs/repl": "^3.1.11",
     "axios": "^0.27.2",
     "luxon": "^3.0.1",

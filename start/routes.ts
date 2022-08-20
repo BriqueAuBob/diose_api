@@ -29,7 +29,7 @@ Route.group(() => {
 }).prefix('auth').as('authentification');
 
 Route.get('statistics', 'StatsController.get').as('statistic');
-// Route.post('statistics', 'StatsController.store').as('statistic.store');
+Route.post('statistics', 'StatsController.store').middleware('throttle:statistic').as('statistic.store');
 
 Route.group(() => {
   Route.get('/', 'TestimonialController.get').as('get');
