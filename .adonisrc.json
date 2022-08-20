@@ -15,16 +15,14 @@
   },
   "preloads": [
     "./start/routes",
-    "./start/kernel",
-    "./start/limiter"
+    "./start/kernel"
   ],
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
     "@adonisjs/lucid",
     "@adonisjs/ally",
-    "@adonisjs/auth",
-    "@adonisjs/limiter"
+    "@adonisjs/auth"
   ],
   "aceProviders": [
     "@adonisjs/repl"
