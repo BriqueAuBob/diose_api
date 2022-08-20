@@ -17,7 +17,6 @@ export default class TestimonialController {
     async store({ request, response, auth }) {
         const newTestimonial = schema.create({
             message: schema.string([
-                rules.required(),
                 rules.minLength(4),
                 rules.maxLength(500)
             ]),
@@ -26,7 +25,15 @@ export default class TestimonialController {
             ])
         })
 
-        const validated = await request.validate({ schema: newTestimonial });
+        const validated = await request.validate({ 
+            schema: newTestimonial, 
+            messages: {
+                required: 'Vous devez dire pour quelle raison vous mettez cet avis.',
+                minLength: 'La raison dois faire au moins {{ options.minLength }} caractères.',
+                maxLength: 'La raison dois faire  {{ options.maxLength }} caractères au maximum.',
+                number: 'Le nombre d\'étoiles dois être un nombre.'
+            }
+        });
         const testimonial = await Testimonial.create({ user_id: auth.user.id, ...validated })
         return response.json({testimonial})
     }

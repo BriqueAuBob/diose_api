@@ -43,7 +43,7 @@ export default class AuthController {
         /**
          * Find or create a user using the provider's user id
          */
-        const dbUser = await User.firstOrCreate({
+        const dbUser = await User.updateOrCreate({
             discord_id: user.id,
         }, {
             discord_id: user.id,
