@@ -25,4 +25,11 @@ export default class StatsController {
             message: "Usage recorded"
         }
     }
+
+    public async getUsages({ auth }) {
+        const usages = await Usage.query().where('user_id', auth.user.id).select('*')
+        return {
+            usages
+        }
+    }
 }

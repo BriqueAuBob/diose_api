@@ -1,5 +1,17 @@
 {
   "commands": {
+    "discord:send_rates": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/DiscordSendRates",
+      "commandName": "discord:send_rates",
+      "description": "",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",

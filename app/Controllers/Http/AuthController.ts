@@ -80,7 +80,14 @@ export default class AuthController {
 
     public async auth({ auth }) {
         return {
-            user: auth.user,
+            user: {...auth.user.$original},
+        }
+    }
+
+    public async destroy({ auth }) {
+        auth.user.delete();
+        return {
+            success: true
         }
     }
 }
