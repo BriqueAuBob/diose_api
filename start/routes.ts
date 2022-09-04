@@ -18,25 +18,40 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from "@ioc:Adonis/Core/Route";
 
 Route.group(() => {
-  Route.get('user', 'AuthController.auth').middleware('auth').as('user')
-  Route.delete('user', 'AuthController.destroy').middleware('auth').as('user.delete.account')
+  Route.get("user", "AuthController.auth").middleware("auth").as("user");
+  Route.delete("user", "AuthController.destroy")
+    .middleware("auth")
+    .as("user.delete.account");
   Route.group(() => {
-    Route.get(':provider', 'AuthController.redirect').as('redirect')
-    Route.get(':provider/callback', 'AuthController.authorize').as('authorize')
-  }).prefix('oauth2').as('oauth2');
+    Route.get(":provider", "AuthController.redirect").as("redirect");
+    Route.get(":provider/callback", "AuthController.authorize").as("authorize");
+  })
+    .prefix("oauth2")
+    .as("oauth2");
 
-  Route.get('user/logs', 'StatsController.getUsages').middleware('auth').as('logs')
-}).prefix('auth').as('authentification');
+  Route.get("user/logs", "StatsController.getUsages")
+    .middleware("auth")
+    .as("logs");
+})
+  .prefix("auth")
+  .as("authentification");
 
-Route.get('statistics', 'StatsController.get').as('statistic');
-Route.post('statistics', 'StatsController.store').middleware('throttle:statistic').as('statistic.store');
+Route.get("statistics", "StatsController.get").as("statistic");
+Route.post("statistics", "StatsController.store")
+  .middleware("throttle:statistic")
+  .as("statistic.store");
 
 Route.group(() => {
-  Route.get('/', 'TestimonialController.get').as('get');
-  Route.post('/', 'TestimonialController.store').middleware('auth').as('store');
-}).prefix('testimonials').as('testimonials');
+  Route.get("/", "TestimonialController.get").as("get");
+  Route.post("/", "TestimonialController.store").middleware("auth").as("store");
+})
+  .prefix("testimonials")
+  .as("testimonials");
 
-Route.post('/suggestions', 'SuggestionsController.store').middleware('auth').as('suggestions.store');
+Route.post("/suggestions", "SuggestionsController.store")
+  .middleware("auth")
+  .as("suggestions.store");
+Route.get("suggestions", "SuggestionsController.index").as("suggestions.index");
