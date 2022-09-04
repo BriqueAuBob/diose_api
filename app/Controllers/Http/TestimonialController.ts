@@ -38,37 +38,37 @@ export default class TestimonialController {
       ...validated,
     });
 
-    // axios.post(
-    //   "https://discordapp.com/api/v8/channels/1011729700558749697/messages",
-    //   {
-    //     embeds: [
-    //       {
-    //         author: {
-    //           icon_url: auth.user.avatar,
-    //           name: auth.user.username,
-    //         },
-    //         title:
-    //           "<:star_yellow:1011743974039507084> ".repeat(
-    //             request.input("star")
-    //           ) +
-    //           "<:star_gray:1011743971850063983> ".repeat(
-    //             5 - request.input("star")
-    //           ),
-    //         description: request.input("message"),
-    //         color: 3092790,
-    //         timestamp: new Date().toISOString(),
-    //         image: {
-    //           url: "https://i.imgur.com/kdJejsd.png",
-    //         },
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     headers: {
-    //       Authorization: "Bot " + Config.get("discord.BOT_TOKEN"),
-    //     },
-    //   }
-    // );
+    axios.post(
+      "https://discordapp.com/api/v8/channels/1011729700558749697/messages",
+      {
+        embeds: [
+          {
+            author: {
+              icon_url: auth.user.avatar,
+              name: auth.user.username,
+            },
+            title:
+              "<:star_yellow:1011743974039507084> ".repeat(
+                request.input("star")
+              ) +
+              "<:star_gray:1011743971850063983> ".repeat(
+                5 - request.input("star")
+              ),
+            description: request.input("message"),
+            color: 3092790,
+            timestamp: new Date().toISOString(),
+            image: {
+              url: "https://i.imgur.com/kdJejsd.png",
+            },
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: "Bot " + Config.get("discord.BOT_TOKEN"),
+        },
+      }
+    );
 
     return response.json({
       message: "Votre avis a bien été publié.",

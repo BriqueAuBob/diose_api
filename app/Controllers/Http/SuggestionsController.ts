@@ -21,7 +21,7 @@ export default class SuggestionsController {
     });
 
     const { data } = await axios.post(
-      "https://discordapp.com/api/v8/channels/1015968524923052083/messages",
+      "https://discordapp.com/api/v8/channels/1011729746062737560/messages",
       {
         embeds: [
           {
@@ -85,7 +85,7 @@ export default class SuggestionsController {
     let suggestions = JSON.parse((await Redis.get("suggestions")) || "[]");
     if (suggestions.length <= 0) {
       const { data } = await axios.get(
-        "https://discord.com/api/v8/channels/1015968524923052083/messages",
+        "https://discord.com/api/v8/channels/1011729746062737560/messages",
         {
           headers: {
             Authorization: "Bot " + Config.get("discord.BOT_TOKEN"),
