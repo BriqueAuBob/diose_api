@@ -1,28 +1,28 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from "luxon";
+import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public discord_id: BigInt
+  public discord_id: string;
 
   @column({ serializeAs: null })
-  public email: string
+  public email: string;
 
   @column()
-  public username: string
+  public username: string;
 
   @column()
-  public discriminator: number
+  public discriminator: number;
 
   @column()
-  public avatar: string
+  public avatar: string;
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 }

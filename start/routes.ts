@@ -21,6 +21,13 @@
 import Route from "@ioc:Adonis/Core/Route";
 
 Route.group(() => {
+  Route.get("users", "UsersController.index").as("users");
+})
+  .prefix("administration")
+  .as("administration");
+// .middleware("auth")
+
+Route.group(() => {
   Route.get("user", "AuthController.auth").middleware("auth").as("user");
   Route.delete("user", "AuthController.destroy")
     .middleware("auth")

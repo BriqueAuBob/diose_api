@@ -5,7 +5,10 @@ import axios from "axios";
 
 export default class AuthController {
   public async redirect({ ally, request }) {
-    const redirect = await ally.use(request.param("provider")).redirectUrl();
+    let redirect = await ally.use(request.param("provider")).redirectUrl();
+    if (request.input("admin")) {
+      redirect = redirect.replace("umaestro.fr", "admin.umaestro.fr");
+    }
     return {
       success: true,
       redirect,

@@ -33,7 +33,8 @@
       "@adonisjs/ally",
       "@adonisjs/auth",
       "@adonisjs/limiter",
-      "@adonisjs/redis"
+      "@adonisjs/redis",
+      "@adonisjs/bouncer"
     ]
   }
 }
