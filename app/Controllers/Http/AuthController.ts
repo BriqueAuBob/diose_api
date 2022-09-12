@@ -18,6 +18,11 @@ export default class AuthController {
   public async authorize({ ally, request, auth }) {
     const provider = await ally.use(request.param("provider"));
 
+    if (request.input("admin")) {
+      provider.options.callbackUrl =
+        "http://localhost:5173/authentification/callback";
+    }
+
     /**
      * User has explicitly denied the login request
      */
