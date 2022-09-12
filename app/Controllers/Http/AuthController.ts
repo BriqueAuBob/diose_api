@@ -7,7 +7,9 @@ export default class AuthController {
   public async redirect({ ally, request }) {
     let redirect = await ally.use(request.param("provider")).redirectUrl();
     if (request.input("admin")) {
-      redirect = redirect.replace("umaestro.fr", "admin.umaestro.fr");
+      redirect = redirect.replace("2F%2Fumaestro.fr", "2F%2Fadmin.umaestro.fr");
+    } else {
+      redirect = redirect.replace("2F%2Fadmin.umaestro.fr", "2F%2Fumaestro.fr");
     }
     return {
       success: true,
@@ -20,7 +22,10 @@ export default class AuthController {
 
     if (request.input("admin")) {
       provider.options.callbackUrl =
-        "http://localhost:5173/authentification/callback";
+        "https://admin.umaestro.fr/authentification/callback";
+    } else {
+      provider.options.callbackUrl =
+        "https://umaestro.fr/authentification/callback";
     }
 
     /**
