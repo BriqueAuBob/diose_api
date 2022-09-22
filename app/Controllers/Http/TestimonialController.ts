@@ -33,7 +33,7 @@ export default class TestimonialController {
         number: "Le nombre d'étoiles dois être un nombre.",
       },
     });
-    const testimonial = await Testimonial.create({
+    await Testimonial.create({
       user_id: auth.user.id,
       ...validated,
     });
