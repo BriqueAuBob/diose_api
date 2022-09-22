@@ -22,6 +22,11 @@ import Route from "@ioc:Adonis/Core/Route";
 
 Route.group(() => {
   Route.get("users", "UsersController.index").as("users");
+  Route.get("users/:id", "UsersController.show").as("user");
+
+  Route.put("users/:id/fetch-avatar", "UsersController.refetchAvatar").as(
+    "refetchAvatar"
+  );
 })
   .prefix("administration")
   .as("administration");
