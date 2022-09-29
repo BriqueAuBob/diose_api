@@ -11,7 +11,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
-          pwd
+          cd ..
           rm -rf umaestro_backend_new
           cp -r umaestro_backend umaestro_backend_new
           cd umaestro_backend_new
