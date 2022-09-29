@@ -11,11 +11,11 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
-          rm -rf umaestro_backend-new
-          cp -r umaestro_backend umaestro_backend-new
-          cd umaestro_backend-new
-          git checkout production
-          git reset --hard origin/production
+          rm -rf umaestro_backend_new
+          cp -r umaestro_backend umaestro_backend_new
+          cd umaestro_backend_new
+          git checkout main
+          git reset --hard origin/main
           git pull
           npm rebuild
           npm install
@@ -34,7 +34,7 @@ jobs:
 
           cd ..
           mv umaestro_backend umaestro_backend-old
-          mv umaestro_backend-new umaestro_backend
+          mv umaestro_backend_new umaestro_backend
 
           # Restart server
 
