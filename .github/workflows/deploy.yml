@@ -11,6 +11,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
+          pwd
           rm -rf umaestro_backend_new
           cp -r umaestro_backend umaestro_backend_new
           cd umaestro_backend_new
@@ -33,7 +34,7 @@ jobs:
           # Replace current version with the new one
 
           cd ..
-          mv umaestro_backend umaestro_backend-old
+          mv umaestro_backend umaestro_backend_old
           mv umaestro_backend_new umaestro_backend
 
           # Restart server
@@ -41,4 +42,4 @@ jobs:
           cd umaestro_backend
           pm2 delete umaestro_backend
           pm2 start build/server.js --name umaestro_backend
-          rm -rf ../umaestro_backend-old
+          rm -rf ../umaestro_backend_old
