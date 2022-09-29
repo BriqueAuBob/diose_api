@@ -7,6 +7,11 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
+      - uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          details: Deployment started...
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
