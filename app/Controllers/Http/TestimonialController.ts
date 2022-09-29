@@ -13,7 +13,7 @@ export default class TestimonialController {
       .orderByRaw("rand()")
       .select("*");
 
-    return response.json({ success: true, testimonials });
+    return response.json({ success: true, test: true, testimonials });
   }
 
   async store({ request, response, auth }) {
