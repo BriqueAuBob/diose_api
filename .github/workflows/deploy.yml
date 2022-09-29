@@ -29,12 +29,13 @@ jobs:
 
           # Run migrations
 
+          cd build
           node ace migration:run --force
           node ace db:seed --force
 
           # Replace current version with the new one
 
-          cd ..
+          cd ../../
           mv umaestro_backend umaestro_backend_old
           mv umaestro_backend_new umaestro_backend
 
