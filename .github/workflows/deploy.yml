@@ -25,6 +25,7 @@ jobs:
 
           npm run build
           cp /var/www/umaestro_backend/.env build/.env
+          npm ci --production
 
           # Run migrations
 
