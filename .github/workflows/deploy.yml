@@ -1,0 +1,44 @@
+name: Deployment to server
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: |
+          rm -rf umaestro_backend-new
+          cp -r umaestro_backend umaestro_backend-new
+          cd umaestro_backend-new
+          git checkout production
+          git reset --hard origin/production
+          git pull
+          npm rebuild
+          npm install
+
+          # Build the api
+
+          npm run build
+          cp .env build/.env
+
+          # Run migrations
+
+          node ace migration:run --force
+          node ace db:seed --force
+
+          # Replace current version with the new one
+
+          cd ..
+          mv umaestro_backend umaestro_backend-old
+          mv umaestro_backend-new umaestro_backend
+
+          # Restart server
+
+          cd umaestro_backend
+          pm2 delete umaestro_backend
+          pm2 start build/server.js --name umaestro_backend
+          rm -rf ../umaestro_backend-old
