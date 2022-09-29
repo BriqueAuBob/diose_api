@@ -24,7 +24,7 @@ jobs:
           # Build the api
 
           npm run build
-          cp .env build/.env
+          cp /var/www/umaestro_backend/.env build/.env
 
           # Run migrations
 
