@@ -31,7 +31,6 @@ jobs:
 
           cd build
           node ace migration:run --force
-          node ace db:seed --force
 
           # Replace current version with the new one
 
