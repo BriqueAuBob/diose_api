@@ -19,6 +19,6 @@ export const { httpLimiters } = Limiter.define(
         .every("1 min")
         .usingKey("user_" + auth?.user?.id.toString());
     }
-    return Limiter.allowRequests(5).every("1 min");
+    return Limiter.allowRequests(1).every("1 min");
   }
 );

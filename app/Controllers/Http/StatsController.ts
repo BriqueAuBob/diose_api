@@ -20,6 +20,7 @@ export default class StatsController {
     await Usage.create({
       user_id: user?.id,
       tool,
+      ip: request.ip(),
     });
 
     return {
