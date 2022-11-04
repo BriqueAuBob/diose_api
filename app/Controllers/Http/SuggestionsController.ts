@@ -93,7 +93,8 @@ export default class SuggestionsController {
         }
       );
       const messagesSuggestions = data.filter(
-        (message) => message.embeds[0].author.name !== "Suggestions"
+        (message) =>
+          message.type === 0 && message.embeds[0].author.name !== "Suggestions"
       );
       await Redis.set(
         "suggestions",
