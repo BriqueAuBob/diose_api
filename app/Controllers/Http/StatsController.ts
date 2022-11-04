@@ -18,6 +18,7 @@ export default class StatsController {
     const { tool } = request.all();
 
     await Usage.create({
+      // @ts-ignore
       user_id: user?.id,
       tool,
       ip: request.ip(),
@@ -35,6 +36,23 @@ export default class StatsController {
     return {
       success: true,
       usages,
+    };
+  }
+
+  public async getAdminUsages({ request }) {
+    const usages = await Usage.query()
+      .orderBy("id", "desc")
+      .preload("author")
+      .where("tool", "LIKE", "%" + request.input("search") + "%")
+      .orWhereHas("author", (query) => {
+        query.where("username", "LIKE", "%" + request.input("search") + "%");
+      })
+      .select("*")
+      .paginate(request.input("page"), 20);
+    return {
+      success: true,
+      meta: usages.getMeta(),
+      usages: usages.toJSON().data,
     };
   }
 }

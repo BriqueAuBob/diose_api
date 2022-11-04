@@ -1,12 +1,17 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { belongsTo, BelongsTo, BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+
+import User from "App/Models/User";
 
 export default class Usage extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
   @column()
-  public user_id: number;
+  public userId: number;
+
+  @belongsTo(() => User)
+  public author: BelongsTo<typeof User>;
 
   @column()
   public tool: string;

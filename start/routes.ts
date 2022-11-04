@@ -27,6 +27,8 @@ Route.group(() => {
   Route.put("users/:id/fetch-avatar", "UsersController.refetchAvatar").as(
     "refetchAvatar"
   );
+
+  Route.get("usages", "StatsController.getAdminUsages").as("usages");
 })
   .prefix("administration")
   .as("administration");
