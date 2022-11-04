@@ -1,10 +1,10 @@
-// import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 import User from "App/Models/User";
 import axios from "axios";
 
 export default class AuthController {
-  public async redirect({ ally, request }) {
+  public async redirect({ ally, request }: HttpContextContract) {
     let redirect = await ally.use(request.param("provider")).redirectUrl();
     if (request.input("admin")) {
       redirect = redirect.replace("2F%2Fumaestro.fr", "2F%2Fadmin.umaestro.fr");
@@ -17,7 +17,7 @@ export default class AuthController {
     };
   }
 
-  public async authorize({ ally, request, auth }) {
+  public async authorize({ ally, request, auth }: HttpContextContract) {
     const provider = await ally.use(request.param("provider"));
 
     if (request.input("admin")) {

@@ -31,8 +31,9 @@ Route.group(() => {
   Route.get("usages", "StatsController.getAdminUsages").as("usages");
 })
   .prefix("administration")
-  .as("administration");
-// .middleware("auth")
+  .as("administration")
+  .middleware("auth")
+  .middleware("isAdmin");
 
 Route.group(() => {
   Route.get("user", "AuthController.auth").middleware("auth").as("user");

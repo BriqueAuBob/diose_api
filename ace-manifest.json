@@ -1,5 +1,17 @@
 {
   "commands": {
+    "api_token:create": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/CreateApiToken",
+      "commandName": "api_token:create",
+      "description": "",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "discord:send_rates": {
       "settings": {
         "loadApp": true,
