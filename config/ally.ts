@@ -60,8 +60,8 @@ const allyConfig: AllyConfig = {
     driver: "discord",
     clientId: Env.get("DISCORD_CLIENT_ID"),
     clientSecret: Env.get("DISCORD_CLIENT_SECRET"),
-    callbackUrl: "https://umaestro.fr/authentification/callback",
-    // callbackUrl: "http://localhost:5173/authentification/callback",
+    // callbackUrl: "https://umaestro.fr/authentification/callback",
+    callbackUrl: "http://localhost:5174",
     scopes: ["guilds", "identify", "email"],
   },
 };

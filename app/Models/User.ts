@@ -20,6 +20,9 @@ export default class User extends BaseModel {
   @column()
   public avatar: string;
 
+  @column({ serializeAs: null })
+  public code: string | null;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 
