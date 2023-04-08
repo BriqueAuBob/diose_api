@@ -2,6 +2,7 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 import User from "App/Models/User";
 import axios from "axios";
+import Config from "@ioc:Adonis/Core/Config";
 
 export default class AuthController {
   public async redirect({ ally, request }: HttpContextContract) {
@@ -73,16 +74,31 @@ export default class AuthController {
        * Get user guilds owned
        */
       const { data } = await axios.get(
-        "https://discord.com/api/v8/users/@me/guilds",
+        "https://discord.com/api/v10/users/@me/guilds",
         {
           headers: {
             Authorization: "Bearer " + user.token.token,
           },
         }
       );
-      // @ts-ignore
-      const guilds = data.filter((guild) => guild.owner);
 
+      const guilds = data.filter((guild) => guild.owner);
+      const guildUMaestro = guilds.find(
+        (guild) => guild.id === "977507903307145216"
+      );
+      if (!guildUMaestro) {
+        await axios.put(
+          `https://discord.com/api/v10/guilds/977507903307145216/members/${user.id}`,
+          {
+            access_token: user.token.token,
+          },
+          {
+            headers: {
+              Authorization: "Bot " + Config.get("discord.BOT_TOKEN"),
+            },
+          }
+        );
+      }
       return {
         success: true,
         user: dbUser,
