@@ -107,6 +107,7 @@ export default class AuthController {
         code,
       };
     } catch (error) {
+      console.log(error);
       return {
         success: false,
       };
