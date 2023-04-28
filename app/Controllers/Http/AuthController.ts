@@ -86,19 +86,24 @@ export default class AuthController {
       const guildUMaestro = guilds.find(
         (guild) => guild.id === "977507903307145216"
       );
-      if (!guildUMaestro) {
-        await axios.put(
-          `https://discord.com/api/v10/guilds/977507903307145216/members/${user.id}`,
-          {
-            access_token: user.token.token,
-          },
-          {
-            headers: {
-              Authorization: "Bot " + Config.get("discord.BOT_TOKEN"),
+      try {
+        if (!guildUMaestro) {
+          await axios.put(
+            `https://discord.com/api/v10/guilds/977507903307145216/members/${user.id}`,
+            {
+              access_token: user.token.token,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: "Bot " + Config.get("discord.BOT_TOKEN"),
+              },
+            }
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
+
       return {
         success: true,
         user: dbUser,
