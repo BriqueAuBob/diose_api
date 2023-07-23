@@ -57,7 +57,7 @@ Route.group(() => {
 })
   .prefix("administration")
   .as("administration")
-  .middleware("auth");
+  .middleware(["auth", "permission:view:dashboard"]);
 
 Route.group(() => {
   Route.get("user", "AuthController.auth").middleware("auth").as("user");
