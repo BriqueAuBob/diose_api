@@ -6,9 +6,10 @@ import axios from "axios";
 export default class UsersController {
   async index({ request }) {
     const users = await User.query()
+      .preload("roles")
       .where("username", "LIKE", "%" + request.input("search") + "%")
       .orWhere("discord_id", "LIKE", "%" + request.input("search") + "%")
-      .paginate(request.input("page"), 10);
+      .paginate(request.input("page"), 20);
 
     return {
       success: true,

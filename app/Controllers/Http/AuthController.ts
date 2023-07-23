@@ -119,9 +119,27 @@ export default class AuthController {
     }
   }
 
-  public async auth({ auth }) {
+  private async getUser(user: User) {
+    await user?.load("roles");
     return {
-      user: { sucess: true, ...auth.user.$original },
+      ...user.$original,
+      code: undefined,
+      roles: user?.roles.map((role) => {
+        return {
+          name: role.name,
+          display_name: role.display_name,
+        };
+      }),
+      permissions: user?.getPermissions().map((perm) => {
+        return perm.name;
+      }),
+    };
+  }
+
+  public async auth({ auth }) {
+    const user = await this.getUser(auth.user);
+    return {
+      user,
     };
   }
 
@@ -152,9 +170,11 @@ export default class AuthController {
         expiresIn: "7days",
       });
 
+      let userReturn = await this.getUser(user);
+
       return {
         success: true,
-        user: user?.$original,
+        user: userReturn,
         token,
       };
     } else {

@@ -2,13 +2,64 @@
 
 import User from "App/Models/User";
 import Usage from "App/Models/Usage";
+import Database from "@ioc:Adonis/Lucid/Database";
 
 export default class StatsController {
   public async get() {
+    const testimonialsAvg = await Database.query()
+      .from("testimonials")
+      .avg("star", "avg")
+      .count("id", "count");
+
+    // this week stats (last 7 days)
+    const weekStats = await Database.query()
+      .from("usages")
+      .count("id", "count")
+      .where("created_at", ">=", Database.raw("NOW() - INTERVAL 7 DAY"));
+
+    const weekStatsUsers = await Database.query()
+      .from("users")
+      .count("id", "count")
+      .where("created_at", ">=", Database.raw("NOW() - INTERVAL 7 DAY"));
+
+    const lastWeekStats = await Database.query()
+      .from("usages")
+      .count("id", "count")
+      .where("created_at", ">=", Database.raw("NOW() - INTERVAL 14 DAY"))
+      .where("created_at", "<=", Database.raw("NOW() - INTERVAL 7 DAY"));
+
+    const lastWeekStatsUsers = await Database.query()
+      .from("users")
+      .count("id", "count")
+      .where("created_at", ">=", Database.raw("NOW() - INTERVAL 14 DAY"))
+      .where("created_at", "<=", Database.raw("NOW() - INTERVAL 7 DAY"));
+
+    const weekLoginStat = await Database.query()
+      .from("api_tokens")
+      .count("id", "count")
+      .where("created_at", ">=", Database.raw("NOW() - INTERVAL 7 DAY"));
+
+    const lastWeekLoginStat = await Database.query()
+      .from("api_tokens")
+      .count("id", "count")
+      .where("created_at", ">=", Database.raw("NOW() - INTERVAL 14 DAY"))
+      .where("created_at", "<=", Database.raw("NOW() - INTERVAL 7 DAY"));
+
+    const membersCount = await User.query().getCount();
+    const toolsUsageCount = await Usage.query().getCount();
+
     return {
       success: true,
-      members: await User.query().getCount(),
-      tools: await Usage.query().getCount(),
+      members: membersCount,
+      tools: toolsUsageCount,
+      testimonials: testimonialsAvg[0].count,
+      testimonialsAvg: testimonialsAvg[0].avg,
+      weekStats: weekStats[0].count,
+      weekStatsUsers: weekStatsUsers[0].count,
+      lastWeekStats: lastWeekStats[0].count,
+      lastWeekStatsUsers: lastWeekStatsUsers[0].count,
+      weekLoginStat: weekLoginStat[0].count,
+      lastWeekLoginStat: lastWeekLoginStat[0].count,
     };
   }
 

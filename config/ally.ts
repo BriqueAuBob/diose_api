@@ -61,7 +61,7 @@ const allyConfig: AllyConfig = {
     clientId: Env.get("DISCORD_CLIENT_ID"),
     clientSecret: Env.get("DISCORD_CLIENT_SECRET"),
     callbackUrl: "https://auth.umaestro.fr",
-    // callbackUrl: "http://localhost:5173",
+    // callbackUrl: "http://localhost:5174",
     scopes: ["guilds", "identify", "email", "guilds.join"],
   },
 };

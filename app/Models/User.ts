@@ -1,5 +1,14 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  column,
+  hasMany,
+  HasMany,
+  ManyToMany,
+  manyToMany,
+} from "@ioc:Adonis/Lucid/Orm";
+import Role from "App/Models/Role";
+import Permission from "./Permission";
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -28,4 +37,24 @@ export default class User extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  @manyToMany(() => Role, {
+    pivotTable: "users_roles",
+    onQuery(query) {
+      query.preload("permissions");
+    },
+  })
+  public roles: ManyToMany<typeof Role>;
+
+  hasPermission(permission: string) {
+    return this.roles.some((role) =>
+      role.permissions.some((perm) => perm.name === permission)
+    );
+  }
+
+  getPermissions() {
+    return this.roles.reduce((acc, role) => {
+      return [...acc, ...role.permissions];
+    }, []);
+  }
 }

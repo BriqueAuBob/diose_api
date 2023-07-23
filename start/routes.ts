@@ -20,20 +20,44 @@
 
 import Route from "@ioc:Adonis/Core/Route";
 
+Route.get("/", () => {
+  return {
+    apiVersion: "2.0",
+  };
+}).as("home");
+
 Route.group(() => {
   Route.get("users", "UsersController.index").as("users");
   Route.get("users/:id", "UsersController.show").as("user");
-
   Route.put("users/:id/fetch-avatar", "UsersController.refetchAvatar").as(
     "refetchAvatar"
   );
+
+  Route.group(() => {
+    Route.get("", "RolesController.index").as("index");
+    Route.post("", "RolesController.store").as("store");
+    Route.get(":id", "RolesController.show").as("show");
+    Route.put(":id", "RolesController.update").as("update");
+    Route.delete(":id", "RolesController.destroy").as("destroy");
+  })
+    .prefix("roles")
+    .as("roles");
+
+  Route.group(() => {
+    Route.get("", "PermissionsController.index").as("index");
+    Route.post("", "PermissionsController.store").as("store");
+    Route.get(":id", "PermissionsController.show").as("show");
+    Route.put(":id", "PermissionsController.update").as("update");
+    Route.delete(":id", "PermissionsController.destroy").as("destroy");
+  })
+    .prefix("permissions")
+    .as("permissions");
 
   Route.get("usages", "StatsController.getAdminUsages").as("usages");
 })
   .prefix("administration")
   .as("administration")
-  .middleware("auth")
-  .middleware("isAdmin");
+  .middleware("auth");
 
 Route.group(() => {
   Route.get("user", "AuthController.auth").middleware("auth").as("user");
