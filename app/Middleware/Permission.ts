@@ -1,5 +1,4 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import { AuthenticationException } from "@adonisjs/auth/build/standalone";
 
 export default class Permission {
   public async handle(
