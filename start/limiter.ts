@@ -9,16 +9,13 @@
 |
 */
 
-import { Limiter } from "@adonisjs/limiter/build/services";
+import { Limiter } from '@adonisjs/limiter/build/services';
 
-export const { httpLimiters } = Limiter.define(
-  "statistic",
-  async ({ auth }) => {
-    if (await auth.use("api").check()) {
-      return Limiter.allowRequests(25)
-        .every("1 min")
-        .usingKey("user_" + auth?.user?.id.toString());
+export const { httpLimiters } = Limiter.define('statistic', async ({ auth }) => {
+    if (await auth.use('api').check()) {
+        return Limiter.allowRequests(25)
+            .every('1 min')
+            .usingKey('user_' + auth?.user?.id.toString());
     }
-    return Limiter.allowRequests(1).every("1 min");
-  }
-);
+    return Limiter.allowRequests(1).every('1 min');
+});

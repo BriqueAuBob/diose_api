@@ -1,69 +1,69 @@
 name: Deployment to server
 on:
-  push:
-    branches: [main]
+    push:
+        branches: [main]
 
 jobs:
-  build:
-    runs-on: self-hosted
-    steps:
-      - uses: rjstone/discord-webhook-notify@v1
-        with:
-          severity: info
-          details: Deployment started...
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - run: |
-          cd ..
-          rm -rf umaestro_backend_new
-          cp -r umaestro_backend umaestro_backend_new
-          cd umaestro_backend_new
-          git checkout main
-          git reset --hard origin/main
-          git pull
-          npm rebuild
-          npm install
+    build:
+        runs-on: self-hosted
+        steps:
+            - uses: rjstone/discord-webhook-notify@v1
+              with:
+                  severity: info
+                  details: Deployment started...
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - run: |
+                  cd ..
+                  rm -rf umaestro_backend_new
+                  cp -r umaestro_backend umaestro_backend_new
+                  cd umaestro_backend_new
+                  git checkout main
+                  git reset --hard origin/main
+                  git pull
+                  npm rebuild
+                  npm install
 
-          # Build the api
+                  # Build the api
 
-          npm run build
-          cp /var/www/umaestro_backend/.env build/.env
-          npm ci --production
+                  npm run build
+                  cp /var/www/umaestro_backend/.env build/.env
+                  npm ci --production
 
-          # Run migrations
+                  # Run migrations
 
-          cd build
-          node ace migration:run --force
+                  cd build
+                  node ace migration:run --force
 
-          # Replace current version with the new one
+                  # Replace current version with the new one
 
-          cd ../../
-          mv umaestro_backend umaestro_backend_old
-          mv umaestro_backend_new umaestro_backend
+                  cd ../../
+                  mv umaestro_backend umaestro_backend_old
+                  mv umaestro_backend_new umaestro_backend
 
-          # Restart server
+                  # Restart server
 
-          cd umaestro_backend
-          pm2 delete umaestro_backend
-          pm2 start build/server.js --name umaestro_backend
-          rm -rf ../umaestro_backend_old
-      - uses: rjstone/discord-webhook-notify@v1
-        if: success()
-        with:
-          severity: info
-          details: Nouvelle version déployée avec succès
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - uses: rjstone/discord-webhook-notify@v1
-        if: failure()
-        with:
-          severity: error
-          details: Something went wrong...
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - uses: rjstone/discord-webhook-notify@v1
-        if: cancelled()
-        with:
-          severity: warn
-          details: Deploy cancelled...
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+                  cd umaestro_backend
+                  pm2 delete umaestro_backend
+                  pm2 start build/server.js --name umaestro_backend
+                  rm -rf ../umaestro_backend_old
+            - uses: rjstone/discord-webhook-notify@v1
+              if: success()
+              with:
+                  severity: info
+                  details: Nouvelle version déployée avec succès
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            - uses: rjstone/discord-webhook-notify@v1
+              if: failure()
+              with:
+                  severity: error
+                  details: Something went wrong...
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            - uses: rjstone/discord-webhook-notify@v1
+              if: cancelled()
+              with:
+                  severity: warn
+                  details: Deploy cancelled...
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}

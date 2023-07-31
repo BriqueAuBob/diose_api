@@ -1,57 +1,50 @@
-import { DateTime } from "luxon";
-import {
-  BaseModel,
-  column,
-  ManyToMany,
-  manyToMany,
-} from "@ioc:Adonis/Lucid/Orm";
-import Role from "App/Models/Role";
+import { DateTime } from 'luxon';
+import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
+import Role from 'App/Models/Role';
 
 export default class User extends BaseModel {
-  @column({ isPrimary: true })
-  public id: number;
+    @column({ isPrimary: true })
+    public id: number;
 
-  @column()
-  public discord_id: string;
+    @column()
+    public discord_id: string;
 
-  @column({ serializeAs: null })
-  public email: string;
+    @column({ serializeAs: null })
+    public email: string;
 
-  @column()
-  public username: string;
+    @column()
+    public username: string;
 
-  @column()
-  public discriminator: number;
+    @column()
+    public discriminator: number;
 
-  @column()
-  public avatar: string;
+    @column()
+    public avatar: string;
 
-  @column({ serializeAs: null })
-  public code: string | null;
+    @column({ serializeAs: null })
+    public code: string | null;
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime;
+    @column.dateTime({ autoCreate: true })
+    public createdAt: DateTime;
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime;
+    @column.dateTime({ autoCreate: true, autoUpdate: true })
+    public updatedAt: DateTime;
 
-  @manyToMany(() => Role, {
-    pivotTable: "users_roles",
-    onQuery(query) {
-      query.preload("permissions");
-    },
-  })
-  public roles: ManyToMany<typeof Role>;
+    @manyToMany(() => Role, {
+        pivotTable: 'users_roles',
+        onQuery(query) {
+            query.preload('permissions');
+        },
+    })
+    public roles: ManyToMany<typeof Role>;
 
-  hasPermission(permission: string) {
-    return this.roles.some((role) =>
-      role.permissions.some((perm) => perm.name === permission)
-    );
-  }
+    hasPermission(permission: string) {
+        return this.roles.some((role) => role.permissions.some((perm) => perm.name === permission));
+    }
 
-  getPermissions() {
-    return this.roles.reduce((acc, role) => {
-      return [...acc, ...role.permissions];
-    }, []);
-  }
+    getPermissions() {
+        return this.roles.reduce((acc, role) => {
+            return [...acc, ...role.permissions];
+        }, []);
+    }
 }

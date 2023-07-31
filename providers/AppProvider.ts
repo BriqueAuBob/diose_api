@@ -1,33 +1,29 @@
-import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import { ApplicationContract } from '@ioc:Adonis/Core/Application';
 
 export default class AppProvider {
-  constructor (protected app: ApplicationContract) {
-  }
+    constructor(protected app: ApplicationContract) {}
 
-  public register () {}
+    public register() {}
 
-  public async boot () {
-    const {
-      DatabaseQueryBuilder,
-      ModelQueryBuilder
-    } = this.app.container.use('Adonis/Lucid/Database')
+    public async boot() {
+        const { DatabaseQueryBuilder, ModelQueryBuilder } = this.app.container.use('Adonis/Lucid/Database');
 
-    DatabaseQueryBuilder.macro('getCount', async function () {
-      const result = await this.count('* as total')
-      return BigInt(result[0].total)
-    })
-    
-    ModelQueryBuilder.macro('getCount', async function () {
-      const result = await this.count('* as total')
-      return BigInt(result[0].$extras.total)
-    })
-  }
+        DatabaseQueryBuilder.macro('getCount', async function () {
+            const result = await this.count('* as total');
+            return BigInt(result[0].total);
+        });
 
-  public async ready () {
-    // App is ready
-  }
+        ModelQueryBuilder.macro('getCount', async function () {
+            const result = await this.count('* as total');
+            return BigInt(result[0].$extras.total);
+        });
+    }
 
-  public async shutdown () {
-    // Cleanup, since app is going down
-  }
+    public async ready() {
+        // App is ready
+    }
+
+    public async shutdown() {
+        // Cleanup, since app is going down
+    }
 }
