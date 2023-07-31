@@ -1,18 +1,26 @@
 import axios from 'axios';
+import Config from '@ioc:Adonis/Core/Config';
 
 export default class DiscordChannelController {
-    async show() {
-        axios
-            .get('https://discord.com/api/v8/channels/1234567890', {
+    async show({ request }) {
+        try {
+            const { data } = await axios.get(`https://discord.com/api/v10/channels/${request.param('id')}`, {
                 headers: {
-                    Authorization: 'Bot ' + process.env.DISCORD_BOT_TOKEN,
+                    Authorization: 'Bot ' + Config.get('discord.BOT_TOKEN_MB'),
                 },
-            })
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
             });
+
+            return {
+                channel: {
+                    type: data.type,
+                    name: data.name,
+                },
+            };
+        } catch (error) {
+            console.log(error);
+            return {
+                channel: null,
+            };
+        }
     }
 }

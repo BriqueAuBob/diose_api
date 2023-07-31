@@ -86,3 +86,9 @@ Route.group(() => {
 
 Route.post('/suggestions', 'SuggestionsController.store').middleware('auth').as('suggestions.store');
 Route.get('suggestions', 'SuggestionsController.index').as('suggestions.index');
+
+Route.group(() => {
+    Route.get('channels/:id', 'Discord/ChannelController.show').as('discord.channels.show');
+})
+    .prefix('discord')
+    .as('discord');
