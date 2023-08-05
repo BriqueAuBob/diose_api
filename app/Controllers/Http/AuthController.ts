@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import Database from '@ioc:Adonis/Lucid/Database';
 
 import User from 'App/Models/User';
 import axios from 'axios';
@@ -56,7 +57,7 @@ export default class AuthController {
                     username: user.nickName,
                     discriminator: user.original.discriminator,
                     avatar: user.avatarUrl,
-                },
+                }
             );
 
             const code = Math.random().toString(36).substring(2, 15);
@@ -92,7 +93,7 @@ export default class AuthController {
                             headers: {
                                 Authorization: 'Bot ' + Config.get('discord.BOT_TOKEN'),
                             },
-                        },
+                        }
                     );
                 }
             } catch (error) {
@@ -107,7 +108,6 @@ export default class AuthController {
                 code,
             };
         } catch (error) {
-            console.log(error);
             return {
                 success: false,
             };
@@ -145,10 +145,42 @@ export default class AuthController {
         };
     }
 
-    public async generateCode({ auth }) {
+    public async generateCode({ auth, request }) {
         const code = Math.random().toString(36).substring(2, 15);
         auth.user.code = code;
         auth.user.save();
+
+        const lastLogin = await Database.query<{ created_at: string }>()
+            .from('api_tokens')
+            .select('created_at')
+            .where('user_id', auth.user.id)
+            .orderBy('created_at', 'desc')
+            .first();
+
+        axios.post(
+            'https://discord.com/api/webhooks/1137527544082616421/C5K8BJ_gdMJzccIdZeT8yWcDx3PPiupYTMjL2CVsdq5HsCbqr3Ky1MNIr8rLQMVHOf6g',
+            {
+                embeds: [
+                    {
+                        title: 'Nouvelle connexion ! 🌐',
+                        color: 0x00ff00,
+                        fields: [
+                            {
+                                name: 'Utilisateur',
+                                value: auth.user.username + ' (<@' + auth.user.discord_id + '>)',
+                                inline: true,
+                            },
+                            {
+                                name: 'Dernière connexion',
+                                value: lastLogin?.created_at || 'Aucune connexion',
+                                inline: true,
+                            },
+                        ],
+                    },
+                ],
+            }
+        );
+
         return {
             success: true,
             code,
