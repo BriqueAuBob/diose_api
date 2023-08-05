@@ -172,7 +172,7 @@ export default class AuthController {
                             },
                             {
                                 name: 'Dernière connexion',
-                                value: lastLogin?.created_at || 'Aucune connexion',
+                                value: lastLogin?.created_at || 'Aucune connexion précédente',
                                 inline: true,
                             },
                         ],
