@@ -145,7 +145,7 @@ export default class AuthController {
         };
     }
 
-    public async generateCode({ auth, request }) {
+    public async generateCode({ auth }) {
         const code = Math.random().toString(36).substring(2, 15);
         auth.user.code = code;
         auth.user.save();
