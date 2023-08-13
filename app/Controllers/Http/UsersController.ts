@@ -23,7 +23,7 @@ export default class UsersController {
         await user?.load('roles');
         return {
             success: true,
-            user: user?.$original,
+            user,
         };
     }
 
