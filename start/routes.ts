@@ -30,7 +30,7 @@ Route.group(() => {
     Route.get('users', 'UsersController.index').as('users');
     Route.get('users/:id', 'UsersController.show').as('user');
     Route.put('users/:id/fetch-avatar', 'UsersController.refetchAvatar').as('refetchAvatar');
-    Route.patch('users/:id/roles', 'UsersController.setUserRoles').as('setUserRoles');
+    Route.put('users/:id/roles', 'UsersController.setUserRoles').as('setUserRoles');
 
     Route.group(() => {
         Route.get('', 'RolesController.index').as('index');
