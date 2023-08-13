@@ -20,6 +20,7 @@ export default class UsersController {
 
     async show({ request }) {
         const user = await User.find(request.param('id'));
+        await user?.load('roles');
         return {
             success: true,
             user: user?.$original,
@@ -40,6 +41,17 @@ export default class UsersController {
         return {
             success: true,
             user: user?.$attributes,
+        };
+    }
+
+    async setUserRoles({ request }) {
+        const user = await User.find(request.param('id'));
+        if (user) {
+            await user.related('roles').sync(request.input('roles'));
+        }
+        return {
+            success: true,
+            user: user?.$original,
         };
     }
 }
