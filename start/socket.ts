@@ -1,8 +1,8 @@
 import Database from '@ioc:Adonis/Lucid/Database';
-import User from 'App/Models/User';
 import Ws from 'App/Services/Ws';
 import { Socket } from 'socket.io';
 import crypto from 'crypto';
+import ToolSave from 'App/Models/ToolSave';
 Ws.boot();
 
 function urlDecode(encoded) {
@@ -38,7 +38,13 @@ function parseToken(token) {
     };
 }
 
-async function checkToken(token: string): Promise<User> {
+type PartialUser = {
+    user_id: number;
+    username: string;
+    avatar: string;
+};
+
+async function checkToken(token: string): Promise<PartialUser> {
     const parsedToken = parseToken(token);
     const user = await Database.query()
         .from('api_tokens')
@@ -49,10 +55,10 @@ async function checkToken(token: string): Promise<User> {
     if (!user) {
         throw new Error('E_INVALID_API_TOKEN');
     }
-    return user as User;
+    return user;
 }
 
-async function authenticate(socket: Socket): Promise<User | string> {
+async function authenticate(socket: Socket): Promise<PartialUser | string> {
     const token = socket.handshake?.query?.token;
 
     if (!token || typeof token !== 'string') {
@@ -101,14 +107,39 @@ function padZero(str, len = 2) {
 /**
  * Listen for incoming socket connections
  */
-let onlineUsers: any[] = [];
+let sessions: {
+    [key: string]: {
+        data: any;
+        online: any[];
+    };
+} = {};
 Ws.io.on('connection', async (socket) => {
     const user = await authenticate(socket);
-    if (!user || typeof user === 'string') return;
+    if (!user || typeof user === 'string') return socket.disconnect();
+
+    const sessionId = socket.handshake?.query?.sessionId as string;
+    if (!sessionId) return socket.disconnect();
+
+    const save = await ToolSave.findById(sessionId);
+    if (!save) return socket.disconnect();
+    if (
+        save.authorId !== user?.user_id &&
+        !save.permissions?.find((permission: any) => permission.userId === user?.user_id)
+    )
+        return socket.disconnect();
+
+    socket.join(sessionId);
+    const roomUser = 'user:' + user?.user_id;
+    socket.join(roomUser);
+    sessions[sessionId] ||= {
+        data: save.data,
+        online: [],
+    };
+    Ws.io.timeout(1000).to(roomUser).emit('valueChange', sessions[sessionId].data);
 
     // handle users logged
     const color = Math.floor(Math.random() * 16777215).toString(16);
-    onlineUsers.push({
+    sessions[sessionId].online.push({
         ...user,
         socketId: socket.id,
         position: {
@@ -118,22 +149,22 @@ Ws.io.on('connection', async (socket) => {
         color: '#' + color,
         textColor: invertColor('#' + color, true),
     });
-    Ws.io.emit('onlineUsers', onlineUsers);
+    Ws.io.to(sessionId).emit('onlineUsers', sessions[sessionId].online);
 
     socket.on('mousemove', (data) => {
-        const userIndex = onlineUsers.findIndex((user) => user.socketId === socket.id);
+        const userIndex = sessions[sessionId].online.findIndex((user) => user.socketId === socket.id);
         if (userIndex === -1) return;
-        onlineUsers[userIndex].position = data;
-        Ws.io.emit('onlineUsers', onlineUsers);
+        sessions[sessionId].online[userIndex].position = data;
+        Ws.io.to(sessionId).emit('onlineUsers', sessions[sessionId].online);
     });
 
     socket.on('valueChange', (data) => {
-        console.log(data);
-        Ws.io.emit('valueChange', data);
+        sessions[sessionId].data = data;
+        Ws.io.to(sessionId).emit('valueChange', data);
     });
 
     socket.on('disconnect', () => {
-        onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
-        Ws.io.emit('onlineUsers', onlineUsers);
+        sessions[sessionId].online = sessions[sessionId].online.filter((user) => user.socketId !== socket.id);
+        Ws.io.to(sessionId).emit('onlineUsers', sessions[sessionId].online);
     });
 });

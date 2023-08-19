@@ -9,6 +9,7 @@ export interface ToolSaveDocument extends mongoose.Document {
     verified: boolean;
     type: string;
     isPublic: boolean;
+    permissions: { userId: number; permission: string }[];
 }
 
 const ToolSaveSchema = new mongoose.Schema(
@@ -21,6 +22,7 @@ const ToolSaveSchema = new mongoose.Schema(
         verified: { type: Boolean, default: false },
         type: { type: String, required: true },
         isPublic: { type: Boolean, default: false },
+        permissions: [{ userId: Number, permission: String }],
     },
     {
         timestamps: true,

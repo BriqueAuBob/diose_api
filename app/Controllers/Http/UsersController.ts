@@ -54,4 +54,17 @@ export default class UsersController {
             user: user?.$original,
         };
     }
+
+    async indexSmall({ request }) {
+        const users = await User.query()
+            .select('id', 'username', 'avatar')
+            .where('username', 'LIKE', '%' + request.input('search') + '%')
+            .orWhere('discord_id', 'LIKE', '%' + request.input('search') + '%')
+            .limit(3);
+
+        return {
+            success: true,
+            users,
+        };
+    }
 }
