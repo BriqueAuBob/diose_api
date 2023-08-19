@@ -93,3 +93,16 @@ Route.group(() => {
 })
     .prefix('discord')
     .as('discord');
+
+Route.group(() => {
+    Route.group(() => {
+        Route.get('saves', 'MakeBetter/SavesController.index').middleware('silentAuth').as('saves.index');
+        Route.get('saves/:id', 'MakeBetter/SavesController.show').middleware('silentAuth').as('saves.show');
+        Route.put('saves/:id', 'MakeBetter/SavesController.update').middleware('auth').as('saves.update');
+        Route.post('saves', 'MakeBetter/SavesController.store').as('saves.store').middleware('auth');
+    })
+        .as('tools')
+        .prefix('tools');
+})
+    .prefix('makebetter')
+    .as('makebetter.');

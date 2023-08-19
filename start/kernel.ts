@@ -39,6 +39,7 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser'), () => i
 |
 */
 Server.middleware.registerNamed({
+    silentAuth: () => import('App/Middleware/SilentAuth'),
     auth: () => import('App/Middleware/Auth'),
     throttle: () => import('@adonisjs/limiter/build/throttle'),
     permission: () => import('App/Middleware/Permission'),

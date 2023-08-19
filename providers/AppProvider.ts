@@ -20,6 +20,7 @@ export default class AppProvider {
     }
 
     public async ready() {
+        await import('../start/mongodb');
         await import('../start/socket');
     }
 
