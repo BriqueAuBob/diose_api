@@ -5,7 +5,7 @@ import sharp from 'sharp';
 export default class UploadController {
     public async show({ request, response }) {
         const { name } = request.params();
-        return response.download(`/var/www/umaestro_backend/uploads/${name}`);
+        return response.download(`/var/www/umaestro_backend/tmp/uploads/${name}`);
     }
 
     public async upload({ request, response }) {
