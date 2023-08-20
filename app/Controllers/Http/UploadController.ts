@@ -1,14 +1,12 @@
 import Route from '@ioc:Adonis/Core/Route';
 import Env from '@ioc:Adonis/Core/Env';
 import sharp from 'sharp';
-// import Application from '@ioc:Adonis/Core/Application';
-import fs from 'fs';
+import Application from '@ioc:Adonis/Core/Application';
 
 export default class UploadController {
     public async show({ request, response }) {
         const { name } = request.params();
-        // return response.download(Application.tmpPath(`uploads/${name}`));
-        return response.stream(fs.createReadStream(`/var/www/umaestro_backend/tmp/uploads/${name}`));
+        return response.download(Application.makePath('/var/www/umaestro_backend/tmp/uploads', name));
     }
 
     public async upload({ request, response }) {
