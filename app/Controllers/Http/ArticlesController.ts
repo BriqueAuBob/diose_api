@@ -38,11 +38,11 @@ export default class ArticlesController {
     }
 
     public async index({ request }) {
-        const { page = 1, type } = request.all();
-        const articleType = ArticleType[type];
+        const { page = 1, type = 1 } = request.all();
+        const articleType = typeof type === 'string' ? ArticleType[type] : type;
         const articles = await Article.query()
-            .where('is_published', true)
-            .where('type', articleType || '')
+            .where('is_published', 1)
+            .where('type', articleType)
             .preload('author')
             .preload('tags')
             .preload('views', (query) => {
