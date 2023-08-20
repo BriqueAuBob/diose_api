@@ -18,7 +18,7 @@
 |
 */
 
-import fs from 'fs';
+// import fs from 'fs';
 import Route from '@ioc:Adonis/Core/Route';
 
 Route.get('/', () => {
