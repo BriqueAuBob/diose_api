@@ -18,6 +18,7 @@
 |
 */
 
+import fs from 'fs';
 import Route from '@ioc:Adonis/Core/Route';
 
 Route.get('/', () => {
@@ -26,57 +27,10 @@ Route.get('/', () => {
     };
 }).as('home');
 
-Route.group(() => {
-    Route.get('users', 'UsersController.index').as('users');
-    Route.get('users/:id', 'UsersController.show').as('user');
-    Route.put('users/:id/fetch-avatar', 'UsersController.refetchAvatar').as('refetchAvatar');
-    Route.put('users/:id/roles', 'UsersController.setUserRoles').as('setUserRoles');
-
-    Route.group(() => {
-        Route.get('', 'RolesController.index').as('index');
-        Route.post('', 'RolesController.store').as('store');
-        Route.get(':id', 'RolesController.show').as('show');
-        Route.put(':id', 'RolesController.update').as('update');
-        Route.delete(':id', 'RolesController.destroy').as('destroy');
-    })
-        .prefix('roles')
-        .as('roles');
-
-    Route.group(() => {
-        Route.get('', 'PermissionsController.index').as('index');
-        Route.post('', 'PermissionsController.store').as('store');
-        Route.get(':id', 'PermissionsController.show').as('show');
-        Route.put(':id', 'PermissionsController.update').as('update');
-        Route.delete(':id', 'PermissionsController.destroy').as('destroy');
-    })
-        .prefix('permissions')
-        .as('permissions');
-
-    Route.get('usages', 'StatsController.getAdminUsages').as('usages');
-})
-    .prefix('administration')
-    .as('administration')
-    .middleware(['auth', 'permission:view_dashboard']);
-
-Route.group(() => {
-    Route.get('user', 'AuthController.auth').middleware('auth').as('user');
-    Route.get('user/code', 'AuthController.getAccessToken').as('user.getToken');
-    Route.post('user/code', 'AuthController.generateCode').middleware('auth').as('user.generateCode');
-    Route.delete('user', 'AuthController.destroy').middleware('auth').as('user.delete.account');
-    Route.group(() => {
-        Route.get(':provider', 'AuthController.redirect').as('redirect');
-        Route.post(':provider/callback', 'AuthController.authorize').as('authorize');
-    })
-        .prefix('oauth2')
-        .as('oauth2');
-
-    Route.get('user/logs', 'StatsController.getUsages').middleware('auth').as('logs');
-})
-    .prefix('auth')
-    .as('authentification');
-
 Route.get('statistics', 'StatsController.get').as('statistic');
 Route.post('statistics', 'StatsController.store').middleware('throttle:statistic').as('statistic.store');
+
+Route.get('users', 'UsersController.indexSmall').as('users');
 
 Route.group(() => {
     Route.get('/', 'TestimonialController.get').as('get');
@@ -88,29 +42,12 @@ Route.group(() => {
 Route.post('/suggestions', 'SuggestionsController.store').middleware('auth').as('suggestions.store');
 Route.get('suggestions', 'SuggestionsController.index').as('suggestions.index');
 
-Route.group(() => {
-    Route.get('channels/:id', 'Discord/ChannelController.show').as('discord.channels.show');
-})
-    .prefix('discord')
-    .as('discord');
+Route.get('articles', 'ArticlesController.index').as('articles.index');
+Route.get('articles/:slug', 'ArticlesController.show').middleware('silentAuth').as('articles.show');
 
-Route.group(() => {
-    Route.group(() => {
-        Route.get('saves', 'MakeBetter/SavesController.index').middleware('silentAuth').as('saves.index');
-        Route.get('saves/:id', 'MakeBetter/SavesController.show').middleware('silentAuth').as('saves.show');
-        Route.put('saves/:id', 'MakeBetter/SavesController.update').middleware('auth').as('saves.update');
-        Route.get('saves/:id/permissions', 'MakeBetter/SavesController.permissions')
-            .middleware('auth')
-            .as('saves.permissions');
-        Route.put('saves/:id/permissions', 'MakeBetter/SavesController.permissionsSet')
-            .middleware('auth')
-            .as('saves.permissions.set');
-        Route.post('saves', 'MakeBetter/SavesController.store').as('saves.store').middleware('auth');
-    })
-        .as('tools')
-        .prefix('tools');
-})
-    .prefix('makebetter')
-    .as('makebetter.');
-
-Route.get('users', 'UsersController.indexSmall').as('users');
+// import routes from './routes';
+fs.readdirSync(__dirname + '/routes').forEach((file) => {
+    if (file.endsWith('.ts')) {
+        import(`./routes/${file}`);
+    }
+});
