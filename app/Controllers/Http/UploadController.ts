@@ -6,7 +6,7 @@ import Application from '@ioc:Adonis/Core/Application';
 export default class UploadController {
     public async show({ request, response }) {
         const { name } = request.params();
-        return response.download(Application.makePath('../storage', name));
+        return response.download(Application.tmpPath(`uploads/${name}`));
     }
 
     public async upload({ request, response }) {
@@ -19,7 +19,7 @@ export default class UploadController {
         }
         const image = await sharp(file.tmpPath).resize(450).toBuffer();
         await sharp(image).toFile(file.tmpPath);
-        await file.move(Application.makePath('../storage'), {
+        await file.move('/var/www/umaestro_backend/tmp/uploads', {
             name: `${new Date().getTime()}.${file.extname}`,
             ensureUniquefileName: true,
         });
