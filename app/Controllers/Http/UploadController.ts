@@ -19,7 +19,7 @@ export default class UploadController {
         }
         const image = await sharp(file.tmpPath).resize(450).toBuffer();
         await sharp(image).toFile(file.tmpPath);
-        await file.move(Application.tmpPath('uploads'), {
+        await file.move('/var/www/umaestro_backend/tmp/uploads', {
             name: `${new Date().getTime()}.${file.extname}`,
             ensureUniquefileName: true,
         });

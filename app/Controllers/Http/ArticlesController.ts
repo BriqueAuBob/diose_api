@@ -65,12 +65,7 @@ export default class ArticlesController {
 
         return {
             meta: articles.getMeta(),
-            articles: articles.toJSON().data.map((article) => {
-                return {
-                    ...article.$original,
-                    views_count: article.$extras.views_count,
-                };
-            }),
+            articles: articles.toJSON().data,
         };
     }
 
