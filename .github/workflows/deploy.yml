@@ -49,6 +49,9 @@ jobs:
                   pm2 delete umaestro_backend
                   pm2 start build/server.js --name umaestro_backend
                   rm -rf ../umaestro_backend_old
+
+                  mkdir tmp
+                  ln -s /var/www/umaestro_backend/tmp ./tmp
             - uses: rjstone/discord-webhook-notify@v1
               if: success()
               with:
