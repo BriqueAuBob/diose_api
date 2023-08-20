@@ -55,9 +55,9 @@ export default class SavesController {
                     avatar: 'https://cdn.discordapp.com/avatars/983094528791683182/3ca96d35287c9c560f435c143f4b3448.webp?size=128',
                 };
             } else if (personal) {
-                saveCopy.author = auth?.user?.$original;
+                saveCopy.author = auth?.user;
             } else {
-                saveCopy.author = (await User.find(save.authorId))?.$original ?? {
+                saveCopy.author = (await User.find(save.authorId)) ?? {
                     username: 'Unknown',
                     avatar: '/images/default_avatar.png',
                 };
