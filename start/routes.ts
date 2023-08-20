@@ -46,8 +46,8 @@ Route.get('articles', 'ArticlesController.index').as('articles.index');
 Route.get('articles/:slug', 'ArticlesController.show').middleware('silentAuth').as('articles.show');
 
 // import routes from './routes';
-fs.readdirSync(__dirname + '/routes').forEach((file) => {
-    if (file.endsWith('.ts')) {
-        import(`./routes/${file}`);
-    }
-});
+import './routes/auth';
+import './routes/admin';
+import './routes/discord';
+import './routes/tools';
+import './routes/upload';
