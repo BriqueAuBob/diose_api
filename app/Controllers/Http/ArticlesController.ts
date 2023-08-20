@@ -41,18 +41,36 @@ export default class ArticlesController {
         const { page = 1, type = 1 } = request.all();
         const articleType = typeof type === 'string' ? ArticleType[type] : type;
         const articles = await Article.query()
+            .select(
+                'id',
+                'author_id',
+                'title_fr',
+                'title_en',
+                'description_fr',
+                'description_en',
+                'slug_fr',
+                'slug_en',
+                'image_fr',
+                'image_en',
+                'created_at',
+                'type'
+            )
             .where('is_published', 1)
             .where('type', articleType)
             .preload('author')
             .preload('tags')
-            .preload('views', (query) => {
-                query.select('article_id').count('* as total_views').groupBy('article_id');
-            })
+            .withCount('views')
             .orderBy('created_at', 'desc')
             .paginate(page, 6);
+
         return {
             meta: articles.getMeta(),
-            articles: articles.toJSON().data,
+            articles: articles.toJSON().data.map((article) => {
+                return {
+                    ...article.$original,
+                    views_count: article.$extras.views_count,
+                };
+            }),
         };
     }
 
