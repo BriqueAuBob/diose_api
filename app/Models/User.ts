@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
+import mongoose from 'mongoose';
 import Role from 'App/Models/Role';
 
 export default class User extends BaseModel {
@@ -48,3 +49,15 @@ export default class User extends BaseModel {
         }, []);
     }
 }
+
+export interface UserDocument extends mongoose.Document {
+    userId: number;
+    guilds: any[];
+}
+
+const UserSchema = new mongoose.Schema({
+    userId: { type: Number },
+    guilds: { type: Array },
+});
+
+export const UserMongo = mongoose.model<UserDocument>('User', UserSchema);

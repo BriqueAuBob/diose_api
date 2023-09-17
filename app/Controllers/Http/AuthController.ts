@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Database from '@ioc:Adonis/Lucid/Database';
 
-import User from 'App/Models/User';
+import User, { UserMongo } from 'App/Models/User';
 import axios from 'axios';
 import Config from '@ioc:Adonis/Core/Config';
 
@@ -80,8 +80,12 @@ export default class AuthController {
                 },
             });
 
+            // store guilds where user is owner
             const guilds = data.filter((guild) => guild.owner);
-            const guildUMaestro = guilds.find((guild) => guild.id === '977507903307145216');
+            UserMongo.updateOne({ userId: dbUser.id }, { $set: { guilds } }, { upsert: true }).exec();
+
+            // put user in guild Diose if not already
+            const guildUMaestro = data.find((guild) => guild.id === '977507903307145216');
             try {
                 if (!guildUMaestro) {
                     await axios.put(
@@ -210,5 +214,13 @@ export default class AuthController {
                 message: 'Invalid code',
             };
         }
+    }
+
+    public async getGuilds({ auth }) {
+        const user = await UserMongo.findOne({ userId: auth.user.id });
+        return {
+            success: true,
+            guilds: user?.guilds,
+        };
     }
 }

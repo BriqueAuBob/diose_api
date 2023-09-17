@@ -13,6 +13,8 @@ Route.group(() => {
         .as('oauth2');
 
     Route.get('user/logs', 'StatsController.getUsages').middleware('auth').as('logs');
+
+    Route.get('user/guilds', 'AuthController.getGuilds').middleware('auth').as('guilds');
 })
     .prefix('auth')
     .as('authentification');
