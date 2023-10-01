@@ -6,6 +6,39 @@ import axios from 'axios';
 import Config from '@ioc:Adonis/Core/Config';
 
 export default class AuthController {
+    private async newAuth(user: User) {
+        const lastLogin = await Database.query<{ created_at: string }>()
+            .from('api_tokens')
+            .select('created_at')
+            .where('user_id', user.id)
+            .orderBy('created_at', 'desc')
+            .first();
+
+        axios.post(
+            'https://discord.com/api/webhooks/1137527544082616421/C5K8BJ_gdMJzccIdZeT8yWcDx3PPiupYTMjL2CVsdq5HsCbqr3Ky1MNIr8rLQMVHOf6g',
+            {
+                embeds: [
+                    {
+                        title: 'Nouvelle connexion ! 🌐',
+                        color: 0x00ff00,
+                        fields: [
+                            {
+                                name: 'Utilisateur',
+                                value: user.username + ' (<@' + user.discord_id + '>)',
+                                inline: true,
+                            },
+                            {
+                                name: 'Dernière connexion',
+                                value: lastLogin?.created_at || 'Aucune connexion précédente',
+                                inline: true,
+                            },
+                        ],
+                    },
+                ],
+            }
+        );
+    }
+
     public async redirect({ ally, request }: HttpContextContract) {
         let redirect = await ally.use(request.param('provider')).redirectUrl();
         return {
@@ -104,6 +137,8 @@ export default class AuthController {
                 console.log(error);
             }
 
+            this.newAuth(dbUser);
+
             return {
                 success: true,
                 user: dbUser,
@@ -154,36 +189,7 @@ export default class AuthController {
         auth.user.code = code;
         auth.user.save();
 
-        const lastLogin = await Database.query<{ created_at: string }>()
-            .from('api_tokens')
-            .select('created_at')
-            .where('user_id', auth.user.id)
-            .orderBy('created_at', 'desc')
-            .first();
-
-        axios.post(
-            'https://discord.com/api/webhooks/1137527544082616421/C5K8BJ_gdMJzccIdZeT8yWcDx3PPiupYTMjL2CVsdq5HsCbqr3Ky1MNIr8rLQMVHOf6g',
-            {
-                embeds: [
-                    {
-                        title: 'Nouvelle connexion ! 🌐',
-                        color: 0x00ff00,
-                        fields: [
-                            {
-                                name: 'Utilisateur',
-                                value: auth.user.username + ' (<@' + auth.user.discord_id + '>)',
-                                inline: true,
-                            },
-                            {
-                                name: 'Dernière connexion',
-                                value: lastLogin?.created_at || 'Aucune connexion précédente',
-                                inline: true,
-                            },
-                        ],
-                    },
-                ],
-            }
-        );
+        this.newAuth(auth.user);
 
         return {
             success: true,
