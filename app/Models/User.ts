@@ -1,63 +1,33 @@
-import { DateTime } from 'luxon';
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
-import mongoose from 'mongoose';
-import Role from 'App/Models/Role';
+import { DateTime } from 'luxon'
+import { withAuthFinder } from '@adonisjs/auth'
+import hash from '@adonisjs/core/services/hash'
+import { compose } from '@adonisjs/core/helpers'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 
-export default class User extends BaseModel {
-    @column({ isPrimary: true })
-    public id: number;
+const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
+  uids: ['email'],
+  passwordColumnName: 'password',
+})
 
-    @column()
-    public discord_id: string;
+export default class User extends compose(BaseModel, AuthFinder) {
+  @column({ isPrimary: true })
+  declare id: number
 
-    @column({ serializeAs: null })
-    public email: string;
+  @column()
+  declare fullName: string | null
 
-    @column()
-    public username: string;
+  @column()
+  declare email: string
 
-    @column()
-    public discriminator: number;
+  @column()
+  declare password: string
 
-    @column()
-    public avatar: string;
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
 
-    @column({ serializeAs: null })
-    public code: string | null;
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 
-    @column.dateTime({ autoCreate: true })
-    public createdAt: DateTime;
-
-    @column.dateTime({ autoCreate: true, autoUpdate: true })
-    public updatedAt: DateTime;
-
-    @manyToMany(() => Role, {
-        pivotTable: 'users_roles',
-        onQuery(query) {
-            query.preload('permissions');
-        },
-    })
-    public roles: ManyToMany<typeof Role>;
-
-    hasPermission(permission: string) {
-        return this.roles.some((role) => role.permissions.some((perm) => perm.name === permission));
-    }
-
-    getPermissions() {
-        return this.roles.reduce((acc, role) => {
-            return [...acc, ...role.permissions];
-        }, []);
-    }
+  static accessTokens = DbAccessTokensProvider.forModel(User)
 }
-
-export interface UserDocument extends mongoose.Document {
-    userId: number;
-    guilds: any[];
-}
-
-const UserSchema = new mongoose.Schema({
-    userId: { type: Number },
-    guilds: { type: Array },
-});
-
-export const UserMongo = mongoose.model<UserDocument>('User', UserSchema);
