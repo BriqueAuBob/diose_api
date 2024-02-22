@@ -6,12 +6,25 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').notNullable()
-      table.string('full_name').nullable()
-      table.string('email', 254).notNullable().unique()
-      table.string('password').notNullable()
+
+      // Global authentification fields
+      table.string('email', 254).notNullable()
+      table.string('password').nullable()
+
+      // Name
+      table.string('username').notNullable()
+      table.string('display_name').nullable()
+      table.string('avatar_url').nullable()
+
+      // Social authentification fields
+      table.string('social_type').nullable()
+      table.integer('social_id').nullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
+    })
+    this.schema.alterTable(this.tableName, (table) => {
+      table.unique(['email', 'social_type'])
     })
   }
 
