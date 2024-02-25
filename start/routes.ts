@@ -16,3 +16,4 @@ router.get('/', async () => {
 })
 
 import './api/auth.js'
+import './api/logs.js'
