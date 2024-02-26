@@ -18,7 +18,7 @@ export default class extends BaseSchema {
 
       // Social authentification fields
       table.string('social_type').nullable()
-      table.integer('social_id').nullable()
+      table.string('social_id').nullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

@@ -15,13 +15,31 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare id: number
 
   @column()
-  declare fullName: string | null
+  declare username: string
+
+  @column()
+  declare displayName?: string
+
+  @column({
+    serialize: (value, _, model) => {
+      return 'https://cdn.discordapp.com/avatars/' + model.$original.socialId + '/' + value + '.png'
+    },
+  })
+  declare avatarUrl?: string
+
+  @column()
+  declare socialType?: string
+
+  @column()
+  declare socialId?: string
 
   @column()
   declare email: string
 
-  @column()
-  declare password: string
+  @column({
+    serializeAs: null,
+  })
+  declare password?: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

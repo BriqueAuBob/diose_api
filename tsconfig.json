@@ -17,9 +17,11 @@
       "#policies/*": ["./app/policies/*.js"],
       "#abilities/*": ["./app/abilities/*.js"],
       "#database/*": ["./database/*.js"],
+      "#repositories/*": ["./app/repositories/*.js"],
+      "#contracts/*": ["./app/contracts/*.js"],
       "#tests/*": ["./tests/*.js"],
       "#start/*": ["./start/*.js"],
-      "#config/*": ["./config/*.js"],
-    },
-  },
+      "#config/*": ["./config/*.js"]
+    }
+  }
 }
