@@ -17,12 +17,23 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare username: string
 
-  @column()
+  @column({
+    serialize: (value, _, model) => {
+      return value || model.$original.username
+    },
+  })
   declare displayName?: string
 
   @column({
     serialize: (value, _, model) => {
-      return 'https://cdn.discordapp.com/avatars/' + model.$original.socialId + '/' + value + '.png'
+      switch (model.$original.socialType) {
+        case 'discord':
+          return (
+            'https://cdn.discordapp.com/avatars/' + model.$original.socialId + '/' + value + '.png'
+          )
+        default:
+          return value
+      }
     },
   })
   declare avatarUrl?: string

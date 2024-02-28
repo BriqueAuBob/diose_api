@@ -1,6 +1,7 @@
 import ServiceOAuth from '#contracts/ServiceOAuth'
 import UserRepository from '#repositories/user'
 import DiscordAuth from './discord/auth.js'
+import GoogleAuth from './google/auth.js'
 import LoggerService from './log.js'
 
 export default class AuthService {
@@ -15,6 +16,8 @@ export default class AuthService {
     switch (provider) {
       case 'discord':
         return await new DiscordAuth(logger, userRepository)
+      case 'google':
+        return await new GoogleAuth(logger, userRepository)
       default:
         throw new Error('Invalid provider')
     }

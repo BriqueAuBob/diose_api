@@ -7,6 +7,11 @@ const allyConfig = defineConfig({
     clientSecret: env.get('DISCORD_CLIENT_SECRET'),
     callbackUrl: `http://localhost:5173/oauth/discord`,
   }),
+  google: services.google({
+    clientId: env.get('GOOGLE_CLIENT_ID'),
+    clientSecret: env.get('GOOGLE_CLIENT_SECRET'),
+    callbackUrl: `http://localhost:5173/oauth/google`,
+  }),
 })
 
 export default allyConfig
