@@ -13,7 +13,7 @@ router
         router.post('/callback', [AuthSocialController, 'handleProviderCallback'])
       })
       .prefix(':provider')
-      .where('provider', /discord|google/)
+      .where('provider', /discord|google|github/)
   })
   .prefix('oauth')
 

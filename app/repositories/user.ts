@@ -2,7 +2,6 @@ import User from '#models/user'
 
 export default class UserRepository {
   async findOrCreate(data: Partial<User>) {
-    console.log(data)
     return await User.firstOrCreate(
       {
         email: data.email,

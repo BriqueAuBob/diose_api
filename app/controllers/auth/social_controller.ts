@@ -23,7 +23,7 @@ export default class AuthSocialController {
       const user = await ally.use(params.provider).user()
       const dbUser = await (
         await this.authService.handleOAuth(params.provider)
-      ).authorizeUser(user.original)
+      ).authorizeUser(params.provider === 'github' ? user : user.original)
 
       this.loggerService.store(
         'info',

@@ -12,6 +12,12 @@ const allyConfig = defineConfig({
     clientSecret: env.get('GOOGLE_CLIENT_SECRET'),
     callbackUrl: `http://localhost:5173/oauth/google`,
   }),
+  github: services.github({
+    clientId: env.get('GITHUB_CLIENT_ID'),
+    clientSecret: env.get('GITHUB_CLIENT_SECRET'),
+    callbackUrl: `http://localhost:5173/oauth/github`,
+    scopes: ['user:email'],
+  }),
 })
 
 export default allyConfig
