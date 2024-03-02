@@ -6,7 +6,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['email'],
+  uids: ['email', 'username'],
   passwordColumnName: 'password',
 })
 
@@ -60,5 +60,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {
     expiresIn: '30 days',
+  })
+
+  static resetPasswordTokens = DbAccessTokensProvider.forModel(User, {
+    expiresIn: '1h',
+    type: 'reset-password',
+    prefix: 'drp_',
   })
 }

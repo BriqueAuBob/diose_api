@@ -22,6 +22,12 @@ router
   .group(() => {
     router.post('/register', [AuthBasicController, 'register'])
     router.post('/login', [AuthBasicController, 'login'])
+    router.post('/forgot-password', [AuthBasicController, 'forgotPassword'])
+    router.post('/reset-password/', [AuthBasicController, 'resetPassword']).middleware(
+      middleware.auth({
+        guards: ['resetPassword'],
+      })
+    )
   })
   .prefix('auth')
 

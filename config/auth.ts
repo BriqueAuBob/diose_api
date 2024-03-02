@@ -11,6 +11,12 @@ const authConfig = defineConfig({
         model: () => import('#models/user'),
       }),
     }),
+    resetPassword: tokensGuard({
+      provider: tokensUserProvider({
+        tokens: 'resetPasswordTokens',
+        model: () => import('#models/user'),
+      }),
+    }),
   },
 })
 

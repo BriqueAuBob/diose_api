@@ -2,8 +2,23 @@ import vine from '@vinejs/vine'
 
 export const userRegisterValidator = vine.compile(
   vine.object({
-    username: vine.string().minLength(3).maxLength(255),
-    email: vine.string().email(),
+    username: vine
+      .string()
+      .minLength(3)
+      .maxLength(255)
+      .unique(async (query, field) => {
+        return !(await query
+          .from('users')
+          .where('username', field)
+          .whereNull('social_type')
+          .first())
+      }),
+    email: vine
+      .string()
+      .email()
+      .unique(async (query, field) => {
+        return !(await query.from('users').where('email', field).whereNull('social_type').first())
+      }),
     password: vine.string().minLength(5).maxLength(255),
     password_confirmation: vine.string().sameAs('password'),
   })
@@ -11,7 +26,14 @@ export const userRegisterValidator = vine.compile(
 
 export const userLoginValidator = vine.compile(
   vine.object({
-    email: vine.string().email(),
+    email: vine.string(),
     password: vine.string().maxLength(255),
+  })
+)
+
+export const userResetPasswordValidator = vine.compile(
+  vine.object({
+    password: vine.string().minLength(5).maxLength(255),
+    password_confirmation: vine.string().sameAs('password'),
   })
 )

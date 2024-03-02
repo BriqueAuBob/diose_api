@@ -18,8 +18,7 @@ export default class ConfigsController {
    * Handle form submission for the create action
    */
   async store({ response, request }: HttpContext) {
-    const data = request.all()
-    const payload = await configurationValidator.validate(data)
+    const payload = await request.validateUsing(configurationValidator)
     const configuration = await this.configurationRepository.create(payload)
     return response.send(configuration)
   }
@@ -35,8 +34,7 @@ export default class ConfigsController {
    * Handle form submission for the edit action
    */
   async update({ params, request, response }: HttpContext) {
-    const data = request.all()
-    const payload = await configurationValidator.validate(data)
+    const payload = await request.validateUsing(configurationValidator)
     const configuration = await this.configurationRepository.update(params.id, payload)
     return response.send(configuration)
   }

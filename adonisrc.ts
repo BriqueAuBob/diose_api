@@ -10,7 +10,7 @@ export default defineConfig({
   | will be scanned automatically from the "./commands" directory.
   |
   */
-  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands')],
+  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands'), () => import('@adonisjs/mail/commands')],
 
   /*
   |--------------------------------------------------------------------------
@@ -34,6 +34,8 @@ export default defineConfig({
     () => import('@adonisjs/auth/auth_provider'),
     () => import('@adonisjs/ally/ally_provider'),
     () => import('./app/providers/config.js'),
+    () => import('@adonisjs/mail/mail_provider'),
+    () => import('@adonisjs/core/providers/edge_provider')
   ],
 
   /*
@@ -70,4 +72,8 @@ export default defineConfig({
     ],
     forceExit: false,
   },
+  metaFiles: [{
+    pattern: 'resources/views/**/*.edge',
+    reloadServer: false,
+  }]
 })
