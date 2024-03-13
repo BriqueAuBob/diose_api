@@ -29,6 +29,7 @@ export default class ConfigProvider {
       config.set('dynamic', mergedConf)
     } catch (err) {
       console.error('Impossible to load dynamic configuration from database')
+      process.exit(1)
     }
   }
 }

@@ -11,10 +11,8 @@ export default class ResetPasswordNotification extends BaseMail {
   }
 
   async prepare() {
-    const token = await User.resetPasswordTokens.create(this.user, ['*'], {
-      expiresIn: '1h',
-    })
-    const signedUrl = router
+    const token = await User.resetPasswordTokens.create(this.user, ['*'])
+    const url = router
       .builder()
       .prefixUrl('http://localhost:5173')
       .disableRouteLookup()
@@ -24,11 +22,11 @@ export default class ResetPasswordNotification extends BaseMail {
     this.message.to(this.user.email)
     this.message.htmlView('emails/reset_password_html', {
       user: this.user,
-      signedUrl: signedUrl,
+      url,
     })
     this.message.textView('emails/reset_password_text', {
       user: this.user,
-      signedUrl: signedUrl,
+      url,
     })
   }
 }

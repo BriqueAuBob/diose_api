@@ -11,7 +11,20 @@ export default class Configuration extends BaseModel {
   @column()
   declare description: string
 
-  @column()
+  @column({
+    serialize(value, _, model) {
+      if (model.$original.type === 'json') {
+        return JSON.parse(value)
+      }
+      if (model.$original.type === 'boolean') {
+        return Boolean(value)
+      }
+      if (model.$original.type === 'number') {
+        return Number(value)
+      }
+      return value
+    },
+  })
   declare value: string
 
   @column()
