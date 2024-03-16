@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('user_id').unsigned().references('id').inTable('users')
-      table.integer('project_id').unsigned().references('id').inTable('projects')
+      table.integer('project_id').unsigned().references('id').inTable('projects').nullable()
       table.text('content').notNullable()
       table.integer('stars').notNullable()
       table.boolean('is_visible').defaultTo(true)

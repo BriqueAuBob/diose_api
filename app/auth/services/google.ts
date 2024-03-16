@@ -1,4 +1,4 @@
-import ServiceOAuth from '../contracts/ServiceOAuth.js'
+import ServiceOAuth from '../contracts/oauth.js'
 import User from '../models/user.js'
 import UserRepository from '../repositories/user.js'
 import LoggerService from '../../core/services/log.js'
