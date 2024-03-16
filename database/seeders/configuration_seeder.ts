@@ -1,6 +1,6 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import { DynamicConfiguration } from '#config/dynamic'
-import Configuration from '#models/configuration'
+import Configuration from '../../app/configuration/models/configuration.js'
 
 export default class extends BaseSeeder {
   async run() {

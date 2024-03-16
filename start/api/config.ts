@@ -1,5 +1,5 @@
 import router from '@adonisjs/core/services/router'
-import ConfigsController from '#controllers/configs_controller'
+import ConfigsController from '../../app/configuration/controllers/configs_controller.js'
 import { middleware } from '#start/kernel'
 
 router

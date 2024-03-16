@@ -1,8 +1,8 @@
 import router from '@adonisjs/core/services/router'
-import AuthSocialController from '#controllers/auth/social_controller'
-import UserController from '#controllers/user_controller'
+import AuthSocialController from '../../app/auth/controllers/social_controller.js'
+import UserController from '../../app/auth/controllers/user_controller.js'
 import { middleware } from '#start/kernel'
-import AuthBasicController from '#controllers/auth/basic_controller'
+import AuthBasicController from '../../app/auth/controllers/basic_controller.js'
 
 router.group(() => {}).prefix('auth')
 
