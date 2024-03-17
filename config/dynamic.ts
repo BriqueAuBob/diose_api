@@ -8,6 +8,7 @@ export const DynamicConfiguration = {
   discord: {
     channels: {
       testimonials: '1157972399589961748',
+      auth: 'ok',
     },
   },
 }

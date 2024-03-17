@@ -1,3 +1,4 @@
+import config from '@adonisjs/core/services/config'
 import ConfigurationRepository from '../repositories/configuration.js'
 import { configurationValidator } from '../validators/configuration.js'
 import { inject } from '@adonisjs/core'
@@ -11,6 +12,7 @@ export default class ConfigsController {
    * Display a list of resource
    */
   async index({ response }: HttpContext) {
+    console.log(config.get('dynamic.discord.channels'))
     return response.send(await this.configurationRepository.all())
   }
 

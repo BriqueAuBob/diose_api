@@ -67,6 +67,7 @@
     "@discordjs/rest": "^2.2.0",
     "@vinejs/vine": "^1.7.1",
     "edge.js": "^6.0.1",
+    "lodash.merge": "^4.6.2",
     "luxon": "^3.4.4",
     "mjml": "^4.15.3",
     "pg": "^8.11.3",

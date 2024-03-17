@@ -1,5 +1,7 @@
 import Configuration from '../models/configuration.js'
 import config from '@adonisjs/core/services/config'
+// @ts-ignore
+import merge from 'lodash.merge'
 
 const castValue = (value: string, type: string) => {
   switch (type) {
@@ -17,15 +19,19 @@ const castValue = (value: string, type: string) => {
 export default class ConfigProvider {
   async ready() {
     try {
+      const defaultConfig = (config.get('dynamic') as any)?.DynamicConfiguration
       const conf = (await Configuration.all()).reduce(
         (acc, { name, value, type: typeValue }) => {
           acc[name] = castValue(value, typeValue)
+          if (typeValue === 'json') {
+            acc[name] = merge(defaultConfig[name], acc[name])
+          }
           return acc
         },
         <{ [key: string]: any }>{}
       )
 
-      const mergedConf = { ...(config.get('dynamic') as any)?.DynamicConfiguration, ...conf }
+      const mergedConf = { ...defaultConfig, ...conf }
       config.set('dynamic', mergedConf)
     } catch (err) {
       console.error('Impossible to load dynamic configuration from database')
