@@ -1,0 +1,28 @@
+{
+  "shared": {
+    "fields": {
+      "username": "nom d'utilisateur",
+      "password": "mot de passe",
+      "password_confirmation": "confirmation du mot de passe"
+    },
+
+    "messages": {
+      "required": "Remplissez le champ {field}.",
+      "email": "L'email doit être valide.",
+      "string": "Le champ {field} doit être une chaîne de caractères.",
+      "minLength": "Le champ {field} doit contenir au moins {min} caractères.",
+      "maxLength": "Le champ {field} doit contenir au plus {max} caractères.",
+      "number": "Le champ {field} doit être un nombre.",
+      "integer": "Le champ {field} doit être un entier.",
+      "min": "Le champ {field} doit être supérieur ou égal à {min}.",
+      "max": "Le champ {field} doit être inférieur ou égal à {max}.",
+      "unique": "Cet {field} est déjà utilisé.",
+
+      "database.unique": "Cet {field} est déjà utilisé.",
+      "username.database.unique": "Ce {field} est déjà utilisé.",
+
+      "sameAs": "Les champs {field} et {otherField} doivent être identiques.",
+      "password.sameAs": "Les mots de passe doivent être identiques."
+    }
+  }
+}
