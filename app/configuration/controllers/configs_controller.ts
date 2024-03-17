@@ -1,4 +1,3 @@
-import config from '@adonisjs/core/services/config'
 import ConfigurationRepository from '../repositories/configuration.js'
 import { configurationValidator } from '../validators/configuration.js'
 import { inject } from '@adonisjs/core'
