@@ -4,7 +4,7 @@ export const configurationValidator = vine.compile(
   vine.object({
     name: vine.string(),
     description: vine.string().optional(),
-    value: vine.string(),
+    value: vine.any(),
     expose: vine.boolean().optional(),
     type: vine.enum(['json', 'string', 'number', 'boolean']).optional(),
   })

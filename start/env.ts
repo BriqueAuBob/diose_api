@@ -47,5 +47,13 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   SMTP_HOST: Env.schema.string(),
-  SMTP_PORT: Env.schema.string()
+  SMTP_PORT: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring the Discord bots
+  |----------------------------------------------------------
+  */
+  DISCORD_BOT_TOKEN_DIOSE: Env.schema.string(),
+  DISCORD_BOT_TOKEN_MAKEBETTER: Env.schema.string(),
 })

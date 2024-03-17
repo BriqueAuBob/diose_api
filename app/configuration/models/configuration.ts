@@ -14,7 +14,7 @@ export default class Configuration extends BaseModel {
   @column({
     serialize(value, _, model) {
       if (model.$original.type === 'json') {
-        return JSON.parse(value)
+        return typeof value === 'object' ? value : JSON.parse(value)
       }
       if (model.$original.type === 'boolean') {
         return Boolean(value)
