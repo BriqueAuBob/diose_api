@@ -17,6 +17,12 @@ const authConfig = defineConfig({
         model: () => import('../app/auth/models/user.js'),
       }),
     }),
+    temporary: tokensGuard({
+      provider: tokensUserProvider({
+        tokens: 'temporaryTokens',
+        model: () => import('../app/auth/models/user.js'),
+      }),
+    }),
   },
 })
 

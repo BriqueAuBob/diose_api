@@ -67,4 +67,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
     type: 'reset-password',
     prefix: 'drp_',
   })
+
+  static temporaryTokens = DbAccessTokensProvider.forModel(User, {
+    expiresIn: '1m',
+    type: 'temporary-auth',
+    prefix: 'dta_',
+  })
 }

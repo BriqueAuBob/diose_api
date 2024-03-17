@@ -28,6 +28,17 @@ router
         guards: ['resetPassword'],
       })
     )
+
+    router.get('/code', [UserController, 'getTemporaryToken']).middleware(
+      middleware.auth({
+        guards: ['api'],
+      })
+    )
+    router.post('/code', [UserController, 'getAccessTokenFromTemporaryToken']).middleware(
+      middleware.auth({
+        guards: ['temporary'],
+      })
+    )
   })
   .prefix('auth')
 
