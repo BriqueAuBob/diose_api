@@ -8,15 +8,21 @@ export default class Testimonial extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  @column({ serializeAs: null })
+  declare authorId: number
+
   @belongsTo(() => User, {
-    foreignKey: 'userId',
+    foreignKey: 'authorId',
   })
-  declare userId: BelongsTo<typeof User>
+  declare author: BelongsTo<typeof User>
+
+  @column({ serializeAs: null })
+  declare projectId: number
 
   @belongsTo(() => Project, {
     foreignKey: 'projectId',
   })
-  declare projectId: BelongsTo<typeof Project>
+  declare project: BelongsTo<typeof Project>
 
   @column()
   declare content: string

@@ -11,6 +11,7 @@
 
 import 'reflect-metadata'
 import { Ignitor, prettyPrintError } from '@adonisjs/core'
+import { BaseModel, SnakeCaseNamingStrategy } from '@adonisjs/lucid/orm'
 
 /**
  * URL to the application root. AdonisJS need it to resolve
@@ -28,6 +29,10 @@ const IMPORTER = (filePath: string) => {
   }
   return import(filePath)
 }
+
+// Set the naming strategy for Lucid models to snake_case naming
+// eg: avatarUrl will be converted to avatar_url in SQL queries and JSON responses
+BaseModel.namingStrategy = new SnakeCaseNamingStrategy()
 
 new Ignitor(APP_ROOT, { importer: IMPORTER })
   .tap((app) => {
