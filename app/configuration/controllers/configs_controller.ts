@@ -12,7 +12,6 @@ export default class ConfigsController {
    * Display a list of resource
    */
   async index({ response }: HttpContext) {
-    console.log(config.get('dynamic.discord.channels'))
     return response.send(await this.configurationRepository.all())
   }
 
