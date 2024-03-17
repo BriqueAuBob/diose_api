@@ -12,13 +12,13 @@ export default class Project extends BaseModel {
   declare description: string
 
   @column()
-  declare logo_url: string
+  declare logoUrl: string
 
   @column()
-  declare cover_url: string
+  declare coverUrl: string
 
   @column()
-  declare is_visible: boolean
+  declare isVisible: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
