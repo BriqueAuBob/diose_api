@@ -52,7 +52,7 @@ export default class Testimonial extends BaseModel {
         body: {
           embeds: [
             {
-              title: i18n.t('testimonials.embed.title', { project: testimonial.project.title }),
+              title: i18n.t('testimonials.embed.title', { project: testimonial.project.name }),
               author: {
                 name: testimonial.author.username,
                 icon_url: testimonial.author.avatarUrl,

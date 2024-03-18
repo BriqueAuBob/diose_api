@@ -6,8 +6,8 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('title').notNullable()
-      table.text('description').notNullable()
+      table.string('name').notNullable()
+      table.text('description').nullable()
       table.text('logo_url').nullable()
       table.text('cover_url').nullable()
       table.boolean('is_visible').defaultTo(false)
