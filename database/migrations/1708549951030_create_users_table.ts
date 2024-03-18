@@ -20,6 +20,9 @@ export default class extends BaseSchema {
       table.string('social_type').nullable()
       table.string('social_id').nullable()
 
+      // Ban
+      table.timestamp('banned_at').nullable()
+
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
     })

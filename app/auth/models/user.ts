@@ -52,6 +52,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   })
   declare password?: string
 
+  @column.dateTime()
+  declare bannedAt?: DateTime | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
