@@ -6,7 +6,14 @@ import type { NextFn } from '@adonisjs/core/types/http'
  * access to unauthenticated users.
  */
 export default class BanMiddleware {
+  private ignoreRoutes = ['/users/@me', '/admin/users/:user/unban']
+
   async handle(ctx: HttpContext, next: NextFn) {
+    if (this.ignoreRoutes.includes(ctx.route!.pattern)) {
+      await next()
+      return
+    }
+
     try {
       const user = await ctx?.auth?.use('api').authenticate()
       if (user?.bannedAt) {
