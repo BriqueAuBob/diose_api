@@ -27,7 +27,7 @@ export default class AdminUserController {
     return user
   }
 
-  async delete({ params, response }: HttpContext) {
+  async destroy({ params, response }: HttpContext) {
     const user = await this.userRepository.findById(params.user)
     await user.delete()
     return response.send({

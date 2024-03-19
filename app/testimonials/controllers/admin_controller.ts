@@ -17,12 +17,13 @@ export default class AdminTestimonialsController {
 
   public async update({ params, request }: HttpContext) {
     const testimonial = await this.testimonialRepository.find(params.id)
-    testimonial.merge(await request.validateUsing(updateTestimonialVisibilityValidator))
+    const payload = await request.validateUsing(updateTestimonialVisibilityValidator)
+    testimonial.isVisible = payload.is_visible
     await testimonial.save()
     return testimonial
   }
 
-  public async delete({ params, response }: HttpContext) {
+  public async destroy({ params, response }: HttpContext) {
     const testimonial = await this.testimonialRepository.find(params.id)
     await testimonial.delete()
     return response.send({

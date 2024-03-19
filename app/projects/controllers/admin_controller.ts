@@ -4,7 +4,7 @@ import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
 @inject()
-export default class ProjectsController {
+export default class AdminProjectsController {
   private projectRepository: ProjectRepository
 
   constructor(projectRepository: ProjectRepository) {
@@ -31,7 +31,7 @@ export default class ProjectsController {
     )
   }
 
-  async delete({ params: { id } }: HttpContext) {
+  async destroy({ params: { id } }: HttpContext) {
     const project = await this.projectRepository.find(id)
     return await this.projectRepository.delete(project)
   }

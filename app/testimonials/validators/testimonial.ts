@@ -17,6 +17,6 @@ export const testimonialValidator = vine.compile(
 
 export const updateTestimonialVisibilityValidator = vine.compile(
   vine.object({
-    isVisible: vine.boolean(),
+    is_visible: vine.boolean(),
   })
 )
