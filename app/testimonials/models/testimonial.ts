@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, afterCreate, belongsTo, column } from '@adonisjs/lucid/orm'
-import User from '../../auth/models/user.js'
+import User from '../../users/models/user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Project from '../../projects/models/project.js'
 import bots, { Routes } from '#services/discord'

@@ -3,7 +3,7 @@ import { inject } from '@adonisjs/core'
 
 import AuthService from '../services/auth.js'
 import LoggerService from '../../core/services/log.js'
-import User from '../models/user.js'
+import User from '../../users/models/user.js'
 
 @inject()
 export default class AuthSocialController {

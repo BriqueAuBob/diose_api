@@ -1,10 +1,10 @@
-import User from '../models/user.js'
-import UserRepository from '../repositories/user.js'
+import User from '../../users/models/user.js'
+import UserRepository from '../../users/repositories/user.js'
 import {
   userLoginValidator,
   userRegisterValidator,
   userResetPasswordValidator,
-} from '../validators/user.js'
+} from '../../users/validators/user.js'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import LoggerService from '../../core/services/log.js'
@@ -84,6 +84,29 @@ export default class AuthBasicController {
     )
 
     return response.send({ message: 'Mot de passe réinitialisé avec succès.' })
+  }
+
+  public async getTemporaryToken({ auth, response }: HttpContext) {
+    const token = await User.temporaryTokens.create(auth.user!)
+    return response.send({
+      token,
+      status: 200,
+    })
+  }
+
+  public async getAccessTokenFromTemporaryToken({ auth, response }: HttpContext) {
+    const token = await User.accessTokens.create(auth?.user!)
+
+    await db
+      .from('auth_access_tokens')
+      .where('id', auth.user!.currentAccessToken.identifier as string)
+      .delete()
+
+    return response.send({
+      token,
+      user: auth.user,
+      status: 200,
+    })
   }
 
   private async sendLog(user: User, title: string, content: string) {

@@ -37,3 +37,13 @@ export const userResetPasswordValidator = vine.compile(
     password_confirmation: vine.string().sameAs('password'),
   })
 )
+
+export const userUpdateValidator = vine.compile(
+  vine.object({
+    username: vine.string().minLength(3).maxLength(255).optional(),
+    email: vine.string().email().optional(),
+    display_name: vine.string().minLength(3).maxLength(255).optional(),
+    password: vine.string().minLength(5).maxLength(255).optional(),
+    password_confirmation: vine.string().sameAs('password').optional(),
+  })
+)

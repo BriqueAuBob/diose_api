@@ -1,6 +1,5 @@
 import router from '@adonisjs/core/services/router'
 import AuthSocialController from '../../app/auth/controllers/social_controller.js'
-import UserController from '../../app/auth/controllers/user_controller.js'
 import { middleware } from '#start/kernel'
 import AuthBasicController from '../../app/auth/controllers/basic_controller.js'
 
@@ -29,25 +28,15 @@ router
       })
     )
 
-    router.get('/code', [UserController, 'getTemporaryToken']).middleware(
+    router.get('/code', [AuthBasicController, 'getTemporaryToken']).middleware(
       middleware.auth({
         guards: ['api'],
       })
     )
-    router.post('/code', [UserController, 'getAccessTokenFromTemporaryToken']).middleware(
+    router.post('/code', [AuthBasicController, 'getAccessTokenFromTemporaryToken']).middleware(
       middleware.auth({
         guards: ['temporary'],
       })
     )
   })
   .prefix('auth')
-
-router
-  .group(() => {
-    router.get('/@me', [UserController, 'currentUser']).middleware(
-      middleware.auth({
-        guards: ['api'],
-      })
-    )
-  })
-  .prefix('users')

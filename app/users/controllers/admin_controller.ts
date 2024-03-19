@@ -1,4 +1,5 @@
-import UserRepository from '#auth/repositories/user'
+import { userUpdateValidator } from '#users/validators/user'
+import UserRepository from '../repositories/user.js'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
@@ -7,6 +8,9 @@ import { DateTime } from 'luxon'
 export default class AdminUserController {
   constructor(private userRepository: UserRepository) {}
 
+  /**
+   * RUD methods
+   **/
   async index({ request }: HttpContext) {
     const { page, limit } = request.qs()
     return await this.userRepository.paginate(page, limit)
@@ -16,6 +20,24 @@ export default class AdminUserController {
     return await this.userRepository.findById(params.user)
   }
 
+  async update({ params, request }: HttpContext) {
+    const user = await this.userRepository.findById(params.user)
+    user.merge(request.validateUsing(userUpdateValidator))
+    await user.save()
+    return user
+  }
+
+  async delete({ params, response }: HttpContext) {
+    const user = await this.userRepository.findById(params.user)
+    await user.delete()
+    return response.send({
+      message: 'User deleted',
+    })
+  }
+
+  /**
+   * Custom methods
+   */
   async ban({ params }: HttpContext) {
     const user = await this.userRepository.findById(params.user)
     user.bannedAt = DateTime.local()

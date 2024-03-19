@@ -1,4 +1,4 @@
-import User from '../../auth/models/user.js'
+import User from '../../users/models/user.js'
 import Log from '../models/log.js'
 import { DiscordWebhookMessage } from '../contracts/discord_webhook_message.js'
 import config from '@adonisjs/core/services/config'

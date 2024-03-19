@@ -1,4 +1,4 @@
-import { Author } from '#auth/services/public_user_serializer'
+import { Author } from '../../users/services/public_user_serializer.js'
 import Testimonial from '../models/testimonial.js'
 
 export default class TestimonialRepository {

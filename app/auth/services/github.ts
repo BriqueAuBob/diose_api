@@ -1,6 +1,6 @@
 import ServiceOAuth from '../contracts/oauth.js'
-import User from '../models/user.js'
-import UserRepository from '../repositories/user.js'
+import User from '../../users/models/user.js'
+import UserRepository from '../../users/repositories/user.js'
 import LoggerService from '../../core/services/log.js'
 
 type GitHubAllyUser = {
