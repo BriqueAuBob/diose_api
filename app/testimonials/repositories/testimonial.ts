@@ -6,6 +6,10 @@ export default class TestimonialRepository {
     return await Testimonial.all()
   }
 
+  async find(id: number) {
+    return await Testimonial.findOrFail(id)
+  }
+
   async create(data: Partial<Testimonial>) {
     return await Testimonial.create(data)
   }
