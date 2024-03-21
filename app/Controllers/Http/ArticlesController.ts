@@ -53,7 +53,7 @@ export default class ArticlesController {
                 'image_fr',
                 'image_en',
                 'created_at',
-                'type'
+                'type',
             )
             .where('is_published', 1)
             .where('type', articleType)
@@ -79,7 +79,9 @@ export default class ArticlesController {
             .where('slug_fr', slug)
             .orWhere('slug_en', slug)
             .orWhere('id', slug)
-            .if(!user.hasPermission('view_articles'), (query) => query.where('is_published', true))
+            .if(!user || (user && !user?.hasPermission?.('view_articles')), (query) =>
+                query.where('is_published', true),
+            )
             .preload('author')
             .preload('tags')
             .preload('views', (query) => {
