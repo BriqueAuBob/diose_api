@@ -90,11 +90,11 @@ export default class ArticlesController {
             .firstOrFail();
 
         await article.load('views', (query) => {
-            query.if(user, (query) => query.where('user_id', user.id)).orWhere('ip_address', request.ip());
+            query.if(user, (query) => query.where('user_id', user?.id)).orWhere('ip_address', request.ip());
         });
         if (article.views.length === 0) {
             await article.related('views').create({
-                user_id: user.id,
+                user_id: user?.id,
                 ip_address: request.ip(),
             });
         }
