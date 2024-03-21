@@ -1,23 +1,35 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import PartnerTeamMember from './partner_team_member.js'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import Project from '#projects/models/project'
 
 export default class Partner extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
+  declare projectId: number | null
+
+  @belongsTo(() => Project, {
+    foreignKey: 'projectId',
+  })
+  declare project: BelongsTo<typeof Project>
+
+  @column()
   declare name: string
 
   @column()
-  declare logo_url: string
+  declare description: string | null
 
   @column()
-  declare website_url: string
+  declare logoUrl: string
 
   @column()
-  declare is_visible: boolean
+  declare websiteUrl: string
+
+  @column()
+  declare isVisible: boolean
 
   @hasMany(() => PartnerTeamMember, {
     foreignKey: 'partnerId',
@@ -25,10 +37,10 @@ export default class Partner extends BaseModel {
   declare members: HasMany<typeof PartnerTeamMember>
 
   @column.dateTime()
-  declare date_start: DateTime
+  declare dateStart: DateTime
 
   @column.dateTime()
-  declare date_end: DateTime
+  declare dateEnd: DateTime
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
