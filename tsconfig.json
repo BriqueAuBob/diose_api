@@ -28,7 +28,8 @@
       "#partners/*": ["./app/partners/*.js"],
       "#projects/*": ["./app/projects/*.js"],
       "#testimonials/*": ["./app/testimonials/*.js"],
-      "#users/*": ["./app/users/*.js"]
+      "#users/*": ["./app/users/*.js"],
+      "#requests/*": ["./app/requests/*.js"]
     }
   }
 }
