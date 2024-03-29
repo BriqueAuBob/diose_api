@@ -17,7 +17,10 @@ export default class RequestController {
   }
 
   public async store({ request }: HttpContext) {
-    return this.requestRepository.create(await request.validateUsing(createRequestValidator))
+    return this.requestRepository.create({
+      ...(await request.validateUsing(createRequestValidator)),
+      type: request.param('type'),
+    })
   }
 
   public async update({ params, request }: HttpContext) {

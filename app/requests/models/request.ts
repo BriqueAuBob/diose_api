@@ -14,6 +14,9 @@ export default class Request extends BaseModel {
   @column()
   declare status: number
 
+  @column()
+  declare data: Record<string, any>
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

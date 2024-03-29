@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.bigInteger('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.string('type').notNullable()
       table.integer('status').notNullable().defaultTo(RequestStatus.Pending)
+      table.jsonb('data').nullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

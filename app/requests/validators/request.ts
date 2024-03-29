@@ -3,15 +3,13 @@ import vine from '@vinejs/vine'
 
 export const createRequestValidator = vine.compile(
   vine.object({
-    userId: vine.number(),
-    type: vine.string(),
+    data: vine.object({}),
   })
 )
 
 export const updateRequestValidator = vine.compile(
   vine.object({
-    userId: vine.number(),
-    type: vine.string(),
+    data: vine.string(),
     status: vine.enum(RequestStatus),
   })
 )
