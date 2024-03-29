@@ -1,6 +1,8 @@
 import RequestStatus from '#requests/enums/status'
 import RequestRepository from '#requests/repositories/request_repository'
+import { createRequestValidator, updateRequestValidator } from '#requests/validators/request'
 import { inject } from '@adonisjs/core'
+import { HttpContext } from '@adonisjs/core/http'
 
 @inject()
 export default class RequestController {
@@ -10,23 +12,26 @@ export default class RequestController {
     return this.requestRepository.getAll()
   }
 
-  public async show(id: number) {
-    return this.requestRepository.find(id)
+  public async show({ params }: HttpContext) {
+    return this.requestRepository.find(params.id)
   }
 
-  public async store(data: any) {
-    return this.requestRepository.create(data)
+  public async store({ request }: HttpContext) {
+    return this.requestRepository.create(await request.validateUsing(createRequestValidator))
   }
 
-  public async update(id: number, data: any) {
-    const request = await this.requestRepository.find(id)
-    if (request.status !== RequestStatus.Pending) {
+  public async update({ params, request }: HttpContext) {
+    const userRequest = await this.requestRepository.find(params.id)
+    if (userRequest.status !== RequestStatus.Pending) {
       throw new Error('Only pending requests can be updated')
     }
-    return this.requestRepository.update(id, data)
+    return this.requestRepository.update(
+      userRequest,
+      await request.validateUsing(updateRequestValidator)
+    )
   }
 
-  public async destroy(id: number) {
-    return this.requestRepository.delete(id)
+  public async destroy({ params }: HttpContext) {
+    return this.requestRepository.delete(params.id)
   }
 }
