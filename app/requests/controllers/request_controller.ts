@@ -17,7 +17,9 @@ export default class RequestController {
   }
 
   public async store({ request }: HttpContext) {
-    const data = await request.validateUsing(createRequestValidator)
+    const data = await request.validateUsing(
+      createRequestValidator(request.param('type') as string)
+    )
     return this.requestRepository.create({
       ...data,
       data: JSON.stringify(data.data),
@@ -30,10 +32,11 @@ export default class RequestController {
     if (userRequest.status !== RequestStatus.Pending) {
       throw new Error('Only pending requests can be updated')
     }
-    return this.requestRepository.update(
-      userRequest,
-      await request.validateUsing(updateRequestValidator)
-    )
+    const data = await request.validateUsing(updateRequestValidator)
+    return this.requestRepository.update(userRequest, {
+      ...data,
+      data: JSON.stringify(data.data),
+    })
   }
 
   public async destroy({ params }: HttpContext) {
