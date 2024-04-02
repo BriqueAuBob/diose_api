@@ -1,7 +1,6 @@
-import Log from '../models/log.js'
+import Log from '#core/models/log'
+import BaseRepository from '#core/repositories/base'
 
-export default class LogRepository {
-  public async getAll() {
-    return await Log.all()
-  }
+export default class LogRepository extends BaseRepository<typeof Log> {
+  protected model = Log
 }

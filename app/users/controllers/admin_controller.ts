@@ -13,7 +13,10 @@ export default class AdminUserController {
    **/
   async index({ request }: HttpContext) {
     const { page, limit } = request.qs()
-    return await this.userRepository.paginate(page, limit)
+    return await this.userRepository.paginate({
+      page,
+      limit,
+    })
   }
 
   async show({ params }: HttpContext) {

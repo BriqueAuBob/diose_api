@@ -4,10 +4,10 @@ import { middleware } from '#start/kernel'
 
 router
   .resource('/configuration', ConfigsController)
-  .middleware(
-    '*',
-    middleware.auth({
-      guards: ['api'],
-    })
-  )
+  // .middleware(
+  //   '*',
+  //   middleware.auth({
+  //     guards: ['api'],
+  //   })
+  // )
   .apiOnly()

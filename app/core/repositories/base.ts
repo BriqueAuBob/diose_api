@@ -1,15 +1,24 @@
 import { ModelId } from '#contracts/model_id'
 import { LucidModel, ModelAttributes } from '@adonisjs/lucid/types/model'
 
+type PaginationOptions = {
+  page?: number
+  limit?: number
+}
+
 export default abstract class BaseRepository<Model extends LucidModel> {
   protected abstract model: Model
 
   async getAll() {
-    return this.model.all()
+    return await this.model.all()
   }
 
   async find(id: ModelId) {
-    return this.model.findOrFail(id)
+    return await this.model.findOrFail(id)
+  }
+
+  async findById(id: ModelId) {
+    return await this.find(id)
   }
 
   async create(data: Partial<ModelAttributes<InstanceType<Model>>>): Promise<InstanceType<Model>> {
@@ -23,7 +32,6 @@ export default abstract class BaseRepository<Model extends LucidModel> {
     if (typeof model === 'number' || typeof model === 'string') {
       model = await this.find(model)
     }
-    console.log('model', model)
     model.merge(data)
     return model.save()
   }
@@ -32,5 +40,9 @@ export default abstract class BaseRepository<Model extends LucidModel> {
     const model = await this.find(id)
     await model.delete()
     return model
+  }
+
+  async paginate({ page = 1, limit = 10 }: PaginationOptions) {
+    return this.model.query().paginate(page, limit)
   }
 }

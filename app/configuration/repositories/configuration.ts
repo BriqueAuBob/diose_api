@@ -1,3 +1,5 @@
+import { ModelId } from '#contracts/model_id'
+import BaseRepository from '#repositories/base'
 import Configuration from '../models/configuration.js'
 import config from '@adonisjs/core/services/config'
 
@@ -9,37 +11,26 @@ interface ConfigData {
   type?: 'json' | 'string' | 'number' | 'boolean'
 }
 
-export default class ConfigurationRepository {
-  async all(): Promise<Configuration[]> {
-    return Configuration.all()
-  }
+export default class ConfigurationRepository extends BaseRepository<typeof Configuration> {
+  protected model = Configuration
 
-  async find(id: number): Promise<Configuration | null> {
-    return Configuration.find(id)
-  }
-
-  async create(data: ConfigData): Promise<void> {
-    const conf = await Configuration.create(data)
+  override async create(data: ConfigData) {
+    const conf = await super.create(data)
     if (conf) {
       config.set('dynamic.' + conf.name, conf.value)
     }
+    return conf
   }
 
-  async update(id: number, data: ConfigData): Promise<Configuration | null> {
-    const confDb = await Configuration.find(id)
-    if (confDb) {
-      confDb.merge(data)
-      await confDb.save()
-      config.set('dynamic.' + confDb.name, confDb.value)
-    }
-    return confDb
+  override async update(model: Configuration | ModelId, data: ConfigData) {
+    const conf = await super.update(model, data)
+    config.set('dynamic.' + conf.name, conf.value)
+    return conf
   }
 
-  async delete(id: number): Promise<void> {
-    const conf = await Configuration.find(id)
-    if (conf) {
-      await conf.delete()
-      config.set('dynamic.' + conf.name, null)
-    }
+  override async delete(id: ModelId) {
+    const conf = await super.delete(id)
+    config.set('dynamic.' + conf.name, null)
+    return conf
   }
 }

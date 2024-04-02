@@ -1,3 +1,4 @@
+import RequestStatus from '#requests/enums/status'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
@@ -12,10 +13,13 @@ export default class Request extends BaseModel {
   declare type: string
 
   @column()
-  declare status: number
+  declare status: RequestStatus
 
-  @column()
-  declare data: Record<string, any>
+  @column({
+    serialize: (value) => JSON.parse(value),
+    consume: (value) => JSON.stringify(value),
+  })
+  declare data: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

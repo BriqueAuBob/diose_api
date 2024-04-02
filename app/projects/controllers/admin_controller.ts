@@ -12,7 +12,7 @@ export default class AdminProjectsController {
   }
 
   async index() {
-    return await this.projectRepository.all()
+    return await this.projectRepository.getAll()
   }
 
   async show({ params: { id } }: HttpContext) {
@@ -32,7 +32,6 @@ export default class AdminProjectsController {
   }
 
   async destroy({ params: { id } }: HttpContext) {
-    const project = await this.projectRepository.find(id)
-    return await this.projectRepository.delete(project)
+    return await this.projectRepository.delete(id)
   }
 }

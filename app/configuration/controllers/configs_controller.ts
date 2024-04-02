@@ -11,7 +11,7 @@ export default class ConfigsController {
    * Display a list of resource
    */
   async index({ response }: HttpContext) {
-    return response.send(await this.configurationRepository.all())
+    return response.send(await this.configurationRepository.getAll())
   }
 
   /**

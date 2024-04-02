@@ -1,9 +1,8 @@
+import BaseRepository from '#repositories/base'
 import User from '../models/user.js'
 
-export default class UserRepository {
-  async create(data: Partial<User>) {
-    return await User.create(data)
-  }
+export default class UserRepository extends BaseRepository<typeof User> {
+  protected model = User
 
   async findOrCreate(data: Partial<User>) {
     return await User.firstOrCreate(
@@ -17,19 +16,11 @@ export default class UserRepository {
     )
   }
 
-  async findById(id: number) {
-    return await User.findOrFail(id)
-  }
-
   async findBySocialId(socialId: string) {
     return await User.findBy('social_id', socialId)
   }
 
   async findRegisteredByEmail(email: string) {
     return await User.query().where('email', email).andWhereNull('social_type').first()
-  }
-
-  async paginate(page: number = 1, limit: number = 10) {
-    return await User.query().orderBy('id', 'asc').paginate(page, limit)
   }
 }

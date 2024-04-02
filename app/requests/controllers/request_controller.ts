@@ -17,9 +17,11 @@ export default class RequestController {
   }
 
   public async store({ request }: HttpContext) {
+    const data = await request.validateUsing(createRequestValidator)
     return this.requestRepository.create({
-      ...(await request.validateUsing(createRequestValidator)),
-      type: request.param('type'),
+      ...data,
+      data: JSON.stringify(data.data),
+      type: request.param('type') as string,
     })
   }
 

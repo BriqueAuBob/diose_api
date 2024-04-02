@@ -8,7 +8,7 @@ export default class AdminPartnersController {
   constructor(private partnerRepository: PartnerRepository) {}
 
   async index() {
-    return await this.partnerRepository.all()
+    return await this.partnerRepository.getAll()
   }
 
   async show({ params: { id } }: HttpContext) {
@@ -28,7 +28,6 @@ export default class AdminPartnersController {
   }
 
   async destroy({ params: { id } }: HttpContext) {
-    const partner = await this.partnerRepository.find(id)
-    return await this.partnerRepository.delete(partner)
+    return await this.partnerRepository.delete(id)
   }
 }
