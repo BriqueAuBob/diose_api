@@ -29,7 +29,8 @@
       "#projects/*": ["./app/projects/*.js"],
       "#testimonials/*": ["./app/testimonials/*.js"],
       "#users/*": ["./app/users/*.js"],
-      "#requests/*": ["./app/requests/*.js"]
+      "#requests/*": ["./app/requests/*.js"],
+      "#notifications/*": ["./app/notifications/*.js"]
     }
   }
 }

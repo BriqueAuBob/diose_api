@@ -1,11 +1,9 @@
+import { notificationValidator } from '#notifications/validators/notifications'
 import RequestStatus from '#requests/enums/status'
 import vine from '@vinejs/vine'
 
 const dataValidators = {
-  notifications: vine.object({
-    title: vine.string(),
-    message: vine.string(),
-  }),
+  notifications: notificationValidator,
 }
 
 export const createRequestValidator = (type: string) => {
