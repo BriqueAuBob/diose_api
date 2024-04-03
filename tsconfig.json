@@ -30,7 +30,8 @@
       "#testimonials/*": ["./app/testimonials/*.js"],
       "#users/*": ["./app/users/*.js"],
       "#requests/*": ["./app/requests/*.js"],
-      "#notifications/*": ["./app/notifications/*.js"]
+      "#notifications/*": ["./app/notifications/*.js"],
+      "#makebetter/*": ["./app/makebetter/*.js"]
     }
   }
 }
