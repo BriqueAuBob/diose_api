@@ -7,6 +7,7 @@ import GithubAuth from './github.js'
 import GoogleAuth from './google.js'
 import LoggerService from '../../core/services/log.js'
 import ResetPasswordNotification from '../mails/reset_password_notification.js'
+import { DateTime } from 'luxon'
 
 export default class AuthService {
   public async handleOAuth(provider: string): Promise<ServiceOAuth<any, any>> {
@@ -28,4 +29,13 @@ export default class AuthService {
   public async forgotPassword(user: User) {
     await mail.send(new ResetPasswordNotification(user))
   }
+}
+
+export type TokenType = {
+  expiresIn: number
+  tokenType: string
+  expiresAt: DateTime
+  id_token: string
+  token: string
+  refreshToken: string
 }

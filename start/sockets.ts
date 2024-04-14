@@ -5,5 +5,8 @@ const instance = Websockets.getInstance()
 const io = instance.getIO()
 
 io.on('connection', (socket) => {
+  console.log('new connection', socket)
   collaboration({ instance, socket })
 })
+
+instance.listen(3333)

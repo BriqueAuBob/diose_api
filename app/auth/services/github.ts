@@ -2,6 +2,7 @@ import ServiceOAuth from '../contracts/oauth.js'
 import User from '../../users/models/user.js'
 import UserRepository from '../../users/repositories/user.js'
 import LoggerService from '../../core/services/log.js'
+import { TokenType } from './auth.js'
 
 type GitHubAllyUser = {
   id: string
@@ -12,27 +13,36 @@ type GitHubAllyUser = {
   original: any
 }
 
-export default class GithubAuth implements ServiceOAuth<GitHubAllyUser, User | boolean> {
+type AdonisAllyUser = GitHubAllyUser & {
+  original: GitHubAllyUser
+  token: TokenType
+}
+
+export default class GithubAuth implements ServiceOAuth<AdonisAllyUser, User | boolean> {
   constructor(
     private loggerService: LoggerService,
     private userRepository: UserRepository
   ) {}
 
-  public async authorizeUser(user: GitHubAllyUser): Promise<User | boolean> {
+  public async authorizeUser(user: AdonisAllyUser): Promise<User | boolean> {
     try {
-      console.log(user)
-      const exists = await this.userRepository.findBySocialId(user.id)
-      if (!exists) {
-        return await this.userRepository.findOrCreate({
+      return await this.userRepository.findOrCreateOAuth(
+        {
           email: user.email,
           username: user.original.login,
           displayName: user.name,
           avatarUrl: user.avatarUrl,
           socialType: 'github',
+        },
+        {
+          provider: 'github',
           socialId: user.id,
-        })
-      }
-      return exists
+          accessToken: user.token.token,
+          refreshToken: user.token.refreshToken,
+          expiresAt: user.token.expiresAt,
+          tokenType: user.token.tokenType,
+        }
+      )
     } catch (error) {
       console.error(error)
       this.loggerService.store('error', 'DiscordAuth')

@@ -34,8 +34,13 @@ export default class ConfigProvider {
       const mergedConf = { ...defaultConfig, ...conf }
       config.set('dynamic', mergedConf)
     } catch (err) {
-      console.error('Impossible to load dynamic configuration from database')
-      process.exit(1)
+      if (
+        err.message !==
+        'select * from "configurations" order by "id" desc - relation "configurations" does not exist'
+      ) {
+        console.error('Impossible to load dynamic configuration from database')
+        process.exit(1)
+      }
     }
   }
 }

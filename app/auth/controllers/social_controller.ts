@@ -21,9 +21,7 @@ export default class AuthSocialController {
   public async handleProviderCallback({ ally, params, response }: HttpContext) {
     try {
       const user = await ally.use(params.provider).user()
-      const dbUser = await (
-        await this.authService.handleOAuth(params.provider)
-      ).authorizeUser(params.provider === 'github' ? user : user.original)
+      const dbUser = await (await this.authService.handleOAuth(params.provider)).authorizeUser(user)
 
       this.loggerService.store(
         'info',

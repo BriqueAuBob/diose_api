@@ -18,7 +18,6 @@ export default class extends BaseSchema {
 
       // Social authentification fields
       table.string('social_type').nullable()
-      table.string('social_id').nullable()
 
       // Ban
       table.timestamp('banned_at').nullable()
