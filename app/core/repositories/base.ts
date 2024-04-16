@@ -1,4 +1,5 @@
 import { ModelId } from '#contracts/model_id'
+import Repository from '#contracts/repository'
 import { LucidModel, ModelAttributes } from '@adonisjs/lucid/types/model'
 
 type PaginationOptions = {
@@ -6,7 +7,7 @@ type PaginationOptions = {
   limit?: number
 }
 
-export default abstract class BaseRepository<Model extends LucidModel> {
+export default abstract class BaseRepository<Model extends LucidModel> implements Repository {
   protected abstract model: Model
 
   async getAll() {
