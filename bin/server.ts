@@ -13,6 +13,9 @@ import 'reflect-metadata'
 import { Ignitor, prettyPrintError } from '@adonisjs/core'
 import { BaseModel, SnakeCaseNamingStrategy } from '@adonisjs/lucid/orm'
 
+import mongoose from 'mongoose'
+import env from '#start/env'
+
 /**
  * URL to the application root. AdonisJS need it to resolve
  * paths to file and directories for scaffolding commands
@@ -39,6 +42,15 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
     app.booting(async () => {
       await import('#start/env')
       await import('#start/sockets')
+
+      try {
+        await mongoose.connect(env.get('MONGO_URL'))
+        console.log('INFO - Connected to MongoDB')
+        await import('#makebetter/features/saves/models/save')
+      } catch (error) {
+        console.error(error)
+        process.exit(1)
+      }
     })
     app.listen('SIGTERM', () => app.terminate())
     app.listenIf(app.managedByPm2, 'SIGINT', () => app.terminate())
