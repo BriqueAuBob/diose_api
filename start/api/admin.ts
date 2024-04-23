@@ -5,6 +5,7 @@ import AdminTestimonialsController from '#testimonials/controllers/admin_control
 import AdminProjectsController from '#projects/controllers/admin_controller'
 import AdminPartnersController from '#partners/controllers/admin_controller'
 import AdminNotificationsController from '#notifications/controllers/admin_controller'
+import AdminTagsController from '#tags/controllers/admin_controller'
 
 router
   .group(() => {
@@ -24,6 +25,7 @@ router
       .apiOnly()
       .except(['store'])
       .as('admin.testimonials')
+    router.resource('tags', AdminTagsController).apiOnly().as('admin.tags')
 
     router
       .resource('notifications', AdminNotificationsController)

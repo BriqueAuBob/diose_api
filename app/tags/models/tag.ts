@@ -1,38 +1,20 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
+import translatable from '#core/decorators/translatable'
 import { DateTime } from 'luxon'
 
-export default class ToolSave extends BaseModel {
+export default class Tag extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
-  declare authorId: number
-
-  @column()
+  @translatable()
   declare name: string
 
   @column()
-  declare description: string
-
-  @column()
-  declare data: JSON
-
-  @column()
-  declare verified: boolean
-
-  @column()
-  declare type: string
-
-  @column()
-  declare isPublic: boolean
+  declare color: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  static get table() {
-    return 'mb_tool_saves'
-  }
 }

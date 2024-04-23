@@ -1,6 +1,6 @@
-import MongoRepository from '#repositories/mongo'
-import Save, { ToolSaveDocument } from '#makebetter/features/saves/models/save'
+import ToolSave from '#makebetter/features/saves/models/save'
+import BaseRepository from '#repositories/base'
 
-export default class SaveRepository extends MongoRepository<typeof Save, ToolSaveDocument> {
-  protected model = Save
+export default class SaveRepository extends BaseRepository<typeof ToolSave> {
+  protected model = ToolSave
 }

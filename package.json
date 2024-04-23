@@ -41,7 +41,8 @@
     "#users/*": "./app/users/*.js",
     "#requests/*": "./app/requests/*.js",
     "#notifications/*": "./app/notifications/*.js",
-    "#makebetter/*": "./app/makebetter/*.js"
+    "#makebetter/*": "./app/makebetter/*.js",
+    "#tags/*": "./app/tags/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.1.1",
@@ -75,7 +76,6 @@
     "lodash.merge": "^4.6.2",
     "luxon": "^3.4.4",
     "mjml": "^4.15.3",
-    "mongoose": "^8.3.1",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
     "socket.io": "^4.7.5"
