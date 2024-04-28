@@ -42,7 +42,8 @@
     "#requests/*": "./app/requests/*.js",
     "#notifications/*": "./app/notifications/*.js",
     "#makebetter/*": "./app/makebetter/*.js",
-    "#tags/*": "./app/tags/*.js"
+    "#tags/*": "./app/tags/*.js",
+    "#suggestions/*": "./app/suggestions/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.1.1",
