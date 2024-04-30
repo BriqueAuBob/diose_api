@@ -6,6 +6,7 @@ import AdminProjectsController from '#projects/controllers/admin_controller'
 import AdminPartnersController from '#partners/controllers/admin_controller'
 import AdminNotificationsController from '#notifications/controllers/admin_controller'
 import AdminTagsController from '#tags/controllers/admin_controller'
+import AdminVotesController from '#votes/controllers/admin_controller'
 
 router
   .group(() => {
@@ -38,5 +39,12 @@ router
       })
       .prefix('notifications')
       .as('admin.notifications')
+    router
+      .group(() => {
+        router.get('/', [AdminVotesController, 'index'])
+        router.get('/:id', [AdminVotesController, 'show'])
+        router.delete('/:id', [AdminVotesController, 'destroy'])
+      })
+      .prefix('votes')
   })
   .prefix('admin')
