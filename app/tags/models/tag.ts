@@ -7,7 +7,9 @@ export default class Tag extends BaseModel {
   declare id: number
 
   @translatable()
-  declare name: string
+  declare name: {
+    [key: string]: string
+  }
 
   @column()
   declare color: string

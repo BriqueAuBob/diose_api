@@ -5,13 +5,13 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.string('in_table').nullable()
-      table.string('field').notNullable()
       table.string('locale').notNullable()
+      table.string('in_table').nullable()
+      table.bigInteger('record_id').unsigned().nullable()
+      table.string('field').notNullable()
       table.string('value').notNullable()
 
-      table.primary(['in_table', 'field', 'locale'])
-      table.unique(['in_table', 'field', 'locale'])
+      table.primary(['in_table', 'field', 'locale', 'record_id'])
     })
   }
 

@@ -2,7 +2,10 @@ import vine from '@vinejs/vine'
 
 const tagValidator = vine.compile(
   vine.object({
-    name: vine.string(),
+    name: vine.object({
+      fr: vine.string(),
+      en: vine.string(),
+    }),
     color: vine.string(),
   })
 )
