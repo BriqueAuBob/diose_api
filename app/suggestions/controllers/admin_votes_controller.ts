@@ -1,4 +1,4 @@
-import VoteRepository from '#votes/repositories/vote'
+import VoteRepository from '#suggestions/repositories/vote'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 

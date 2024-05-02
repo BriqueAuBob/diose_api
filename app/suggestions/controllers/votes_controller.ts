@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 import VoteRepository from '../repositories/vote.js'
 import { inject } from '@adonisjs/core'
-import { voteValidator } from '#votes/validators/vote'
+import { voteValidator } from '#suggestions/validators/vote'
 
 @inject()
 export default class VoteController {
@@ -14,14 +14,14 @@ export default class VoteController {
   }
 
   async store({ request, response, auth }: HttpContext) {
-    const { suggestion_id, vote } = await request.validateUsing(voteValidator)
+    const { params, vote } = await request.validateUsing(voteValidator)
     const user = auth.user!
-    const existingVote = await this.voteRepository.findByUserAndSuggestion(user.id, suggestion_id)
+    const existingVote = await this.voteRepository.findByUserAndSuggestion(user.id, params.id)
 
     if (existingVote) await existingVote.delete()
 
     const newVote = await this.voteRepository.create({
-      suggestionId: suggestion_id,
+      suggestionId: params.id,
       userId: user.id,
       vote
     })

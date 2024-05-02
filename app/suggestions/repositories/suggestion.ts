@@ -15,12 +15,22 @@ export default class SuggestionRepository {
 	}
 
 	async paginate(page: number = 1, limit: number = 10) {
-		return (await Suggestion.query().preload('author').paginate(page, limit)).serialize({
-			relations: {
-				author: {
-					fields: Author
+		return (
+			await Suggestion
+				.query()
+				.preload('author')
+				.preload('votes', (votesQuery) => {
+					votesQuery.preload('user')
+				}).paginate(page, limit)).serialize({
+					relations: {
+						author: {
+							fields: Author
+						},
+					votes: {
+						fields: ['id', 'user_id', 'suggestion_id', 'vote', 'created_at', 'updated_at']
+					}
 				}
 			}
-		})
+		)
 	}
 }

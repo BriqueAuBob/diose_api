@@ -7,8 +7,10 @@ import { HttpContext } from '@adonisjs/core/http'
 export default class AdminSuggestionsController {
 	constructor(private suggestionRepository: SuggestionRepository) {}
 
-	public async index() {
-		return await this.suggestionRepository.getAll()
+	public async index({ response, request }: HttpContext) {
+		const { page, per_page } = request.qs()
+
+    return response.send(await this.suggestionRepository.paginate(page, per_page))
 	}
 
 	public async show({ params }: HttpContext) {
