@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('message').notNullable()
       table.jsonb('data').nullable()
       table.boolean('is_read').defaultTo(false)
-      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.bigInteger('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

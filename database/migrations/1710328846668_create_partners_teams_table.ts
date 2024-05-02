@@ -12,7 +12,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('partners')
         .onDelete('CASCADE')
-      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.bigInteger('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.string('role').notNullable().defaultTo('TEAM_MEMBER')
       table.timestamp('created_at')
       table.timestamp('updated_at')

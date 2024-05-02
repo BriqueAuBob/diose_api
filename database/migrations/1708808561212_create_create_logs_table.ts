@@ -5,10 +5,10 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
       table.enum('level', ['info', 'error', 'warning'])
       table.string('message')
-      table.integer('user_id').nullable().unsigned().references('id').inTable('users')
+      table.bigInteger('user_id').nullable().unsigned().references('id').inTable('users')
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

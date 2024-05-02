@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('provider').notNullable()
       table.string('social_id').notNullable()
-      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.bigInteger('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.string('token_type').nullable().defaultTo('Bearer')
       table.text('access_token').nullable()
       table.text('refresh_token').nullable()

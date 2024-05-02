@@ -7,16 +7,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table
-        .integer('suggestion_id')
-        .unsigned()
-        .references('suggestions.id')
-        .onDelete('CASCADE')
-      table
-        .integer('user_id')
-        .unsigned()
-        .references('users.id')
-        .onDelete('CASCADE')
+      table.integer('suggestion_id').unsigned().references('suggestions.id').onDelete('CASCADE')
+      table.bigInteger('user_id').unsigned().references('users.id').onDelete('CASCADE')
       table.enum('vote', ['up', 'down'])
 
       table.timestamp('created_at')

@@ -7,13 +7,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table
-        .integer('author_id')
-        .unsigned()
-        .references('users.id')
-      table
-        .string('description')
-        .notNullable()
+      table.bigInteger('author_id').unsigned().references('users.id')
+      table.string('description').notNullable()
       table.enum('status', ['pending', 'approved', 'rejected'])
 
       table.timestamp('created_at')

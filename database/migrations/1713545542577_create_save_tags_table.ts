@@ -6,7 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.bigInteger('save_id').unsigned().references('mb_tool_saves.id').onDelete('CASCADE')
-      table.bigInteger('tag_id').unsigned().references('tags.id').onDelete('CASCADE')
+      table.integer('tag_id').unsigned().references('tags.id').onDelete('CASCADE')
       table.primary(['save_id', 'tag_id'])
     })
   }
