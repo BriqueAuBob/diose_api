@@ -11,8 +11,13 @@ export default class Tag extends BaseModel {
     [key: string]: string
   }
 
-  @column()
+  @column({
+    serialize: (value) => `#${value}`,
+  })
   declare color: string
+
+  @column()
+  declare type: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

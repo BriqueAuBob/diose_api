@@ -7,6 +7,7 @@ const tagValidator = vine.compile(
       en: vine.string(),
     }),
     color: vine.string(),
+    type: vine.string().optional(),
   })
 )
 
