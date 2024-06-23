@@ -4,26 +4,15 @@ import { HttpContext } from '@adonisjs/core/http'
 import { createSaveValidator } from '../validators/save.js'
 
 @inject()
-export default class SavesController {
+export default class AdminSavesController {
   constructor(private saveRepository: SaveRepository) {}
 
   async index({ request }: HttpContext) {
-    return await this.saveRepository.search(
-      {
-        isPublic: true,
-        isVerified: true,
-      },
-      request.qs()
-    )
+    return await this.saveRepository.search({ isPublic: true }, request.qs())
   }
 
   async show({ params }: HttpContext) {
     return await this.saveRepository.findById(params.id)
-  }
-
-  async store({ request, auth }: HttpContext) {
-    const payload = await request.validateUsing(createSaveValidator)
-    return await this.saveRepository.create({ ...payload, authorId: auth?.user?.id })
   }
 
   async update({ request, params }: HttpContext) {

@@ -20,6 +20,30 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
     ) as ToolSave[]
   }
 
+  async search(
+    query: Record<string, any>,
+    qs: Record<string, any> = {
+      page: 1,
+      per_page: 20,
+    }
+  ) {
+    const saves = await this.model
+      .query()
+      .where(query)
+      .preload('tags')
+      .preload('author')
+      .paginate(qs.page || 1, qs.per_page || 20)
+    return saves.map((save) =>
+      save.serialize({
+        relations: {
+          author: {
+            fields: Author,
+          },
+        },
+      })
+    ) as ToolSave[]
+  }
+
   async find(id: ModelId): Promise<ToolSave> {
     const save = await super.find(id)
     await save.load('author')

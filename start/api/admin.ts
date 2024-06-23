@@ -8,6 +8,7 @@ import AdminNotificationsController from '#notifications/controllers/admin_contr
 import AdminTagsController from '#tags/controllers/admin_controller'
 import AdminSuggestionsController from '#suggestions/controllers/admin_suggestions_controller'
 import AdminVotesController from '#suggestions/controllers/admin_votes_controller'
+import AdminSavesController from '#makebetter/features/saves/controllers/admin_controller'
 
 router
   .group(() => {
@@ -55,5 +56,11 @@ router
         router.delete('/:id', [AdminVotesController, 'destroy'])
       })
       .prefix('votes')
+
+    router
+      .group(() => {
+        router.resource('saves', AdminSavesController).apiOnly().except(['store']).as('admin.saves')
+      })
+      .prefix('makebetter')
   })
   .prefix('admin')

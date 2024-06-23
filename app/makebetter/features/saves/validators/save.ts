@@ -11,4 +11,11 @@ const createSaveValidator = vine.compile(
   })
 )
 
-export { createSaveValidator }
+const updateSaveStatusValidator = vine.compile(
+  vine.object({
+    isPublic: vine.boolean(),
+    isVerified: vine.boolean(),
+  })
+)
+
+export { createSaveValidator, updateSaveStatusValidator }

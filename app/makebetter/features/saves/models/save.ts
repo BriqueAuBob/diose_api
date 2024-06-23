@@ -22,7 +22,7 @@ export default class ToolSave extends BaseModel {
   declare data: JSON
 
   @column()
-  declare verified: boolean
+  declare isVerified: boolean
 
   @column()
   declare type: string
