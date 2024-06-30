@@ -56,4 +56,11 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   DISCORD_BOT_TOKEN_DIOSE: Env.schema.string(),
   DISCORD_BOT_TOKEN_MAKEBETTER: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring the AUTH url
+  |----------------------------------------------------------
+  */
+  AUTH_URL: Env.schema.string(),
 })

@@ -5,17 +5,17 @@ const allyConfig = defineConfig({
   discord: services.discord({
     clientId: env.get('DISCORD_CLIENT_ID'),
     clientSecret: env.get('DISCORD_CLIENT_SECRET'),
-    callbackUrl: `http://localhost:5173/oauth/discord`,
+    callbackUrl: env.get('AUTH_URL') + `/oauth/discord`,
   }),
   google: services.google({
     clientId: env.get('GOOGLE_CLIENT_ID'),
     clientSecret: env.get('GOOGLE_CLIENT_SECRET'),
-    callbackUrl: `http://localhost:5173/oauth/google`,
+    callbackUrl: env.get('AUTH_URL') + `/oauth/google`,
   }),
   github: services.github({
     clientId: env.get('GITHUB_CLIENT_ID'),
     clientSecret: env.get('GITHUB_CLIENT_SECRET'),
-    callbackUrl: `http://localhost:5173/oauth/github`,
+    callbackUrl: env.get('AUTH_URL') + `/oauth/github`,
     scopes: ['user:email'],
   }),
 })
