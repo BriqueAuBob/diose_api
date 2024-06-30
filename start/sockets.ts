@@ -10,4 +10,4 @@ io.on('connection', (socket) => {
   collaboration({ instance, socket })
 })
 
-instance.listen(env.get('PORT'))
+instance.listen(env.get('PORT') + 1)
