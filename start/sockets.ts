@@ -1,4 +1,5 @@
 import Websockets from '#services/websockets'
+import env from './env.js'
 import collaboration from './websockets/collaboration.js'
 
 const instance = Websockets.getInstance()
@@ -9,4 +10,4 @@ io.on('connection', (socket) => {
   collaboration({ instance, socket })
 })
 
-instance.listen(3333)
+instance.listen(env.get('PORT'))
