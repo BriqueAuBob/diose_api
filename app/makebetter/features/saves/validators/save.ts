@@ -7,7 +7,7 @@ const createSaveValidator = vine.compile(
     data: vine.any(),
     type: vine.string(),
     isPublic: vine.boolean(),
-    tags: vine.array(vine.number()).optional(),
+    tags: vine.array(vine.number().optional()).optional(),
   })
 )
 
