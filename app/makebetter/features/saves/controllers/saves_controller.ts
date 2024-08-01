@@ -8,10 +8,11 @@ export default class SavesController {
   constructor(private saveRepository: SaveRepository) {}
 
   async index({ request }: HttpContext) {
+    const { personal } = request.qs()
     return await this.saveRepository.search(
       {
-        isPublic: true,
-        isVerified: true,
+        isPublic: !personal,
+        isVerified: !personal,
       },
       request.qs()
     )
