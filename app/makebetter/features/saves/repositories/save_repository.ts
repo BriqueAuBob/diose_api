@@ -33,13 +33,6 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
         },
       },
     })
-    // return saves.serialize({
-    //   relations: {
-    //     author: {
-    //       fields: Author,
-    //     },
-    //   },
-    // })
   }
 
   async find(id: ModelId): Promise<ToolSave> {
