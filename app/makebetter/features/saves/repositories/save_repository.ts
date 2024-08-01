@@ -33,15 +33,14 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
       .preload('tags')
       .preload('author')
       .paginate(qs.page || 1, qs.per_page || 20)
-    return saves.map((save) =>
-      save.serialize({
-        relations: {
-          author: {
-            fields: Author,
-          },
+
+    return saves.serialize({
+      relations: {
+        author: {
+          fields: Author,
         },
-      })
-    ) as ToolSave[]
+      },
+    })
   }
 
   async find(id: ModelId): Promise<ToolSave> {

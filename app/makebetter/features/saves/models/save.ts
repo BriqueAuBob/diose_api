@@ -19,7 +19,7 @@ export default class ToolSave extends BaseModel {
   declare description: string
 
   @column({
-    consume: (value: string) => JSON.parse(value),
+    consume: (value: string) => value,
     prepare: (value: JSON) => JSON.stringify(value),
   })
   declare data: JSON
