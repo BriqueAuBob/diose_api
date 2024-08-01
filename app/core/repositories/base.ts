@@ -1,14 +1,19 @@
 import { ModelId } from '#contracts/model_id'
 import Repository from '#contracts/repository'
 import { LucidModel, ModelAttributes } from '@adonisjs/lucid/types/model'
+import { ExtractModelRelations } from '@adonisjs/lucid/types/relations'
 
 type PaginationOptions = {
-  page?: number
-  limit?: number
+  page: number
+  limit: number
 }
+
+export type { PaginationOptions }
 
 export default abstract class BaseRepository<Model extends LucidModel> implements Repository {
   protected abstract model: Model
+
+  protected abstract relations: Record<ExtractModelRelations<InstanceType<Model>>, string[]>
 
   async getAll() {
     return await this.model.all()
@@ -45,5 +50,21 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
 
   async paginate({ page = 1, limit = 10 }: PaginationOptions) {
     return this.model.query().paginate(page, limit)
+  }
+
+  async search(
+    query: Record<string, any>,
+    options: PaginationOptions = { page: 1, limit: 10 }
+  ): Promise<any> {
+    const q = this.model.query()
+    q.where(query)
+    if (this.relations) {
+      Object.entries(this.relations).forEach(([relation, fields]) =>
+        q.preload(relation as ExtractModelRelations<InstanceType<Model>>, (builder) => {
+          builder.select(fields as string[])
+        })
+      )
+    }
+    return await q.paginate(options.page, options.limit)
   }
 }

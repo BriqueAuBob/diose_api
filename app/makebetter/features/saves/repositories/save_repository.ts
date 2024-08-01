@@ -1,11 +1,16 @@
 import { ModelId } from '#contracts/model_id'
 import ToolSave from '#makebetter/features/saves/models/save'
-import BaseRepository from '#repositories/base'
+import BaseRepository, { PaginationOptions } from '#repositories/base'
 import { Author } from '#users/services/public_user_serializer'
 import ToolSaveTag from '../models/save_tags.js'
 
 export default class SaveRepository extends BaseRepository<typeof ToolSave> {
   protected model = ToolSave
+
+  protected relations = {
+    author: ['id', 'username', 'avatarUrl'],
+    tags: ['id'],
+  }
 
   async getAll() {
     const saves = await this.model.query().preload('tags').preload('author')
@@ -20,27 +25,21 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
     ) as ToolSave[]
   }
 
-  async search(
-    query: Record<string, any>,
-    qs: Record<string, any> = {
-      page: 1,
-      per_page: 20,
-    }
-  ) {
-    const saves = await this.model
-      .query()
-      .where(query)
-      .preload('tags')
-      .preload('author')
-      .paginate(qs.page || 1, qs.per_page || 20)
-
-    return saves.serialize({
+  async search(query: Record<string, any>, options: PaginationOptions = { page: 1, limit: 10 }) {
+    return (await super.search(query, options)).serialize({
       relations: {
         author: {
           fields: Author,
         },
       },
     })
+    // return saves.serialize({
+    //   relations: {
+    //     author: {
+    //       fields: Author,
+    //     },
+    //   },
+    // })
   }
 
   async find(id: ModelId): Promise<ToolSave> {
