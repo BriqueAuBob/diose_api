@@ -11,8 +11,9 @@ export default class AdminTagsController {
     this.tagRepository = tagRepository
   }
 
-  async index() {
-    return await this.tagRepository.getAll()
+  async index({ request }: HttpContext) {
+    const { type, name } = request.qs()
+    return await this.tagRepository.search({ type, name })
   }
 
   async show({ params: { id } }: HttpContext) {

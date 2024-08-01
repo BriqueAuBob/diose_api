@@ -57,7 +57,10 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
     options: PaginationOptions = { page: 1, limit: 10 }
   ): Promise<any> {
     const q = this.model.query()
-    q.where(query)
+    Object.entries(query).forEach(([key, value]) => {
+      if (value === undefined) return
+      this.handleValue(q, key, value)
+    })
     if (this.relations) {
       Object.entries(this.relations).forEach(([relation, fields]) =>
         q.preload(relation as ExtractModelRelations<InstanceType<Model>>, (builder) => {
@@ -66,5 +69,29 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
       )
     }
     return await q.paginate(options.page, options.limit)
+  }
+
+  // Methods used to handle different types of query values
+  private handleArrayValue(q: any, key: string, value: any[]) {
+    q.whereIn(key, value)
+  }
+
+  private handleStringValue(q: any, key: string, value: string) {
+    if (value === '') return
+    if (value.includes('%')) {
+      q.where(key, 'LIKE', value)
+    } else {
+      q.where(key, value)
+    }
+  }
+
+  private handleValue(q: any, key: string, value: any) {
+    if (Array.isArray(value)) {
+      this.handleArrayValue(q, key, value)
+    } else if (typeof value === 'string') {
+      this.handleStringValue(q, key, value)
+    } else {
+      q.where(key, value)
+    }
   }
 }
