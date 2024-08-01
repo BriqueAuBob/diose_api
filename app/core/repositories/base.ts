@@ -13,7 +13,7 @@ export type { PaginationOptions }
 export default abstract class BaseRepository<Model extends LucidModel> implements Repository {
   protected abstract model: Model
 
-  protected abstract relations: Record<ExtractModelRelations<InstanceType<Model>>, string[]>
+  protected relations?: Record<ExtractModelRelations<InstanceType<Model>>, string[]>
 
   async getAll() {
     return await this.model.all()

@@ -8,7 +8,7 @@ export default class AdminSavesController {
   constructor(private saveRepository: SaveRepository) {}
 
   async index({ request }: HttpContext) {
-    return await this.saveRepository.search({ isPublic: true }, request.qs())
+    return await this.saveRepository.search({ isPublic: true })
   }
 
   async show({ params }: HttpContext) {
