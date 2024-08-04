@@ -9,7 +9,7 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
 
   protected relations = {
     author: ['id', 'username', 'avatarUrl'],
-    tags: ['id'],
+    tags: [],
   }
 
   async getAll() {
@@ -30,6 +30,9 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
       relations: {
         author: {
           fields: Author,
+        },
+        tags: {
+          fields: ['id', 'name', 'color'],
         },
       },
     })
