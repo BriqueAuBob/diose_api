@@ -2,6 +2,7 @@ import { ModelId } from '#contracts/model_id'
 import Repository from '#contracts/repository'
 import { LucidModel, ModelAttributes } from '@adonisjs/lucid/types/model'
 import { ExtractModelRelations } from '@adonisjs/lucid/types/relations'
+import { visitLexicalEnvironment } from 'typescript'
 
 type PaginationOptions = {
   page: number
@@ -59,16 +60,59 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
     const q = this.model.query()
     Object.entries(query).forEach(([key, value]) => {
       if (value === undefined) return
+      if (this.isRelationship(key)) return
       this.handleValue(q, key, value)
     })
     if (this.relations) {
-      Object.entries(this.relations).forEach(([relation, fields]) =>
+      Object.entries(this.relations).forEach(([relation, fields]) => {
         q.preload(relation as ExtractModelRelations<InstanceType<Model>>, (builder) => {
           builder.select(fields as string[])
         })
-      )
+        // check if query params contains relation
+        const queryRelationships = this.findQueryForRelationship(relation, query)
+        console.log(queryRelationships)
+        for (const property in queryRelationships) {
+          const value = queryRelationships[property]
+          if (Array.isArray(value.value)) {
+            q.andWhereHas(property as ExtractModelRelations<InstanceType<Model>>, (b) => {
+              console.log('prop', property, value)
+              b.whereIn(value.key, value.value)
+            })
+          }
+        }
+      })
     }
     return await q.paginate(options.page, options.limit)
+  }
+
+  private isRelationship(field: string) {
+    const splitted = field.split('.')
+    if (splitted?.[0] && this.relations) {
+      return new Boolean(
+        this.relations[splitted?.[0] as ExtractModelRelations<InstanceType<Model>>]
+      )
+    }
+    return false
+  }
+
+  private findQueryForRelationship(relation: string, query: Record<string, any>) {
+    const queryRelationships: {
+      [key: string]: {
+        key: string
+        value: any
+      }
+    } = {}
+    for (const property in query) {
+      const splitted = property.split('.')
+      console.log('property', property, splitted, query[property])
+      if (splitted?.[0] && splitted?.[1]) {
+        queryRelationships[relation] = {
+          key: splitted[1],
+          value: query[property],
+        }
+      }
+    }
+    return queryRelationships
   }
 
   // Methods used to handle different types of query values

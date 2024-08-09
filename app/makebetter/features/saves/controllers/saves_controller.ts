@@ -16,6 +16,7 @@ export default class SavesController {
     return await this.paginationService.search(this.saveRepository, {
       isPublic: !personal,
       isVerified: !personal,
+      ...request.qs(),
     })
   }
 
