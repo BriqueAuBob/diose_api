@@ -73,12 +73,13 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
         console.log(queryRelationships)
         for (const property in queryRelationships) {
           const value = queryRelationships[property]
-          if (Array.isArray(value.value)) {
-            q.andWhereHas(property as ExtractModelRelations<InstanceType<Model>>, (b) => {
-              console.log('prop', property, value)
+          q.andWhereHas(property as ExtractModelRelations<InstanceType<Model>>, (b) => {
+            if (Array.isArray(value.value)) {
               b.whereIn(value.key, value.value)
-            })
-          }
+            } else {
+              b.where(value.key, value.value)
+            }
+          })
         }
       })
     }
