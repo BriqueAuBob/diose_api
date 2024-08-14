@@ -2,7 +2,6 @@ import { ModelId } from '#contracts/model_id'
 import Repository from '#contracts/repository'
 import { LucidModel, ModelAttributes } from '@adonisjs/lucid/types/model'
 import { ExtractModelRelations } from '@adonisjs/lucid/types/relations'
-import { visitLexicalEnvironment } from 'typescript'
 
 type PaginationOptions = {
   page: number
@@ -135,7 +134,7 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
       if (key === 'search') {
         const columns = this.model.$columnsDefinitions
         let i = 0
-        for (const [key, column] of columns) {
+        for (const [, column] of columns) {
           q[i === 0 ? 'whereRaw' : 'orWhereRaw'](
             `CAST(${column.columnName} AS text) ILIKE '%${value}%'`
           )
