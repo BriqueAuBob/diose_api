@@ -70,7 +70,6 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
         })
         // check if query params contains relation
         const queryRelationships = this.findQueryForRelationship(relation, query)
-        console.log(queryRelationships)
         for (const property in queryRelationships) {
           const value = queryRelationships[property]
           q.andWhereHas(property as ExtractModelRelations<InstanceType<Model>>, (b) => {
@@ -91,7 +90,7 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
     if (splitted?.[0] && this.relations) {
       return new Boolean(
         this.relations[splitted?.[0] as ExtractModelRelations<InstanceType<Model>>]
-      )
+      ).valueOf()
     }
     return false
   }
@@ -105,7 +104,6 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
     } = {}
     for (const property in query) {
       const splitted = property.split('.')
-      console.log('property', property, splitted, query[property])
       if (splitted?.[0] && splitted?.[1]) {
         queryRelationships[relation] = {
           key: splitted[1],
@@ -134,7 +132,19 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
     if (Array.isArray(value)) {
       this.handleArrayValue(q, key, value)
     } else if (typeof value === 'string') {
-      this.handleStringValue(q, key, value)
+      if (key === 'search') {
+        const columns = this.model.$columnsDefinitions
+        let i = 0
+        for (const [key, column] of columns) {
+          q[i === 0 ? 'whereRaw' : 'orWhereRaw'](
+            `CAST(${column.columnName} AS text) ILIKE '%${value}%'`
+          )
+          i++
+        }
+      } else {
+        if (!this.model.$getColumn(key)) return
+        this.handleStringValue(q, key, value)
+      }
     } else {
       q.where(key, value)
     }
