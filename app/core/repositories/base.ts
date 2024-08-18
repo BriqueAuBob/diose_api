@@ -1,6 +1,6 @@
 import { ModelId } from '#contracts/model_id'
 import Repository from '#contracts/repository'
-import { LucidModel, ModelAttributes } from '@adonisjs/lucid/types/model'
+import { LucidModel, ModelAttributes, ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import { ExtractModelRelations } from '@adonisjs/lucid/types/relations'
 
 type PaginationOptions = {
@@ -114,11 +114,19 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
   }
 
   // Methods used to handle different types of query values
-  private handleArrayValue(q: any, key: string, value: any[]) {
+  private handleArrayValue(
+    q: ModelQueryBuilderContract<Model, InstanceType<Model>>,
+    key: string,
+    value: any[]
+  ) {
     q.whereIn(key, value)
   }
 
-  private handleStringValue(q: any, key: string, value: string) {
+  private handleStringValue(
+    q: ModelQueryBuilderContract<Model, InstanceType<Model>>,
+    key: string,
+    value: string
+  ) {
     if (value === '') return
     if (value.includes('%')) {
       q.where(key, 'LIKE', value)
@@ -127,19 +135,21 @@ export default abstract class BaseRepository<Model extends LucidModel> implement
     }
   }
 
-  private handleValue(q: any, key: string, value: any) {
+  private handleValue(
+    q: ModelQueryBuilderContract<Model, InstanceType<Model>>,
+    key: string,
+    value: any
+  ) {
     if (Array.isArray(value)) {
       this.handleArrayValue(q, key, value)
     } else if (typeof value === 'string') {
       if (key === 'search') {
-        const columns = this.model.$columnsDefinitions
-        let i = 0
-        for (const [, column] of columns) {
-          q[i === 0 ? 'whereRaw' : 'orWhereRaw'](
-            `CAST(${column.columnName} AS text) ILIKE '%${value}%'`
-          )
-          i++
-        }
+        q.where((builder) => {
+          const columns = this.model.$columnsDefinitions
+          for (const [, column] of columns) {
+            builder.orWhereRaw(`CAST(${column.columnName} AS text) ILIKE '%${value}%'`)
+          }
+        })
       } else {
         if (!this.model.$getColumn(key)) return
         this.handleStringValue(q, key, value)

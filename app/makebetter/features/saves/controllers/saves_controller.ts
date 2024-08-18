@@ -13,9 +13,10 @@ export default class SavesController {
 
   async index({ request }: HttpContext) {
     const { personal } = request.qs()
+    const isPersonal = personal && personal !== 'true'
     return await this.paginationService.search(this.saveRepository, {
-      isPublic: !personal,
-      isVerified: !personal,
+      isPublic: isPersonal,
+      isVerified: isPersonal,
       ...request.qs(),
     })
   }
