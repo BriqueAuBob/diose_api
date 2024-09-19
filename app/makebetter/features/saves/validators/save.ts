@@ -18,4 +18,15 @@ const updateSaveStatusValidator = vine.compile(
   })
 )
 
-export { createSaveValidator, updateSaveStatusValidator }
+const updateMembersValidator = vine.compile(
+  vine.object({
+    members: vine.array(
+      vine.object({
+        userId: vine.number(),
+        role: vine.string(),
+      })
+    ),
+  })
+)
+
+export { createSaveValidator, updateSaveStatusValidator, updateMembersValidator }

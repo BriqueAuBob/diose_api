@@ -11,3 +11,5 @@ router
     )
   })
   .prefix('users')
+
+router.resource('users', UserController).only(['index'])

@@ -11,3 +11,15 @@ router
       guards: ['api'],
     })
   )
+
+router.get('makebetter/saves/:id/members', [SavesController, 'getMembers']).middleware(
+  middleware.auth({
+    guards: ['api'],
+  })
+)
+
+router.put('makebetter/saves/:id/members', [SavesController, 'updateMembers']).middleware(
+  middleware.auth({
+    guards: ['api'],
+  })
+)

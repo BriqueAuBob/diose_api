@@ -10,6 +10,7 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
   protected relations = {
     author: ['id', 'username', 'avatarUrl'],
     tags: [],
+    members: ['id', 'user_id', 'role'],
   }
 
   async getAll() {
@@ -31,6 +32,14 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
         author: {
           fields: Author,
         },
+        members: {
+          fields: ['id', 'role'],
+          relations: {
+            user: {
+              fields: ['id', 'username', 'avatarUrl'],
+            },
+          },
+        },
         tags: {
           fields: ['id', 'name', 'color'],
         },
@@ -42,10 +51,19 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
     const save = await super.find(id)
     await save.load('author')
     await save.load('tags')
+    await save.load('members')
     return save.serialize({
       relations: {
         author: {
           fields: Author,
+        },
+        members: {
+          fields: ['id', 'role'],
+          relations: {
+            user: {
+              fields: ['id', 'username', 'avatar_url'],
+            },
+          },
         },
       },
     }) as ToolSave
@@ -61,6 +79,28 @@ export default class SaveRepository extends BaseRepository<typeof ToolSave> {
     const save = await super.update(id, data)
     await ToolSaveTag.query().where('saveId', id).delete()
     await ToolSaveTag.createMany(data.tags.map((tagId: number) => ({ tagId, saveId: save.id })))
+    return save
+  }
+
+  async getMembers(id: ModelId) {
+    const save = await super.find(id)
+    await save.load('members')
+    const members = save.members.map((member) => member.serialize()) as Record<string, any>[]
+    await save.load('author')
+    members.push({
+      userId: save.authorId,
+      role: 'admin',
+      user: save.author,
+    })
+    return members
+  }
+
+  async updateMembers(id: ModelId, members: Record<string, any>[]): Promise<ToolSave> {
+    const save = await super.find(id)
+    await save.related('members').query().delete()
+    await save
+      .related('members')
+      .createMany(members.filter((member) => member.userId != save.authorId))
     return save
   }
 }

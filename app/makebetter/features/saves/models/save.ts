@@ -1,9 +1,10 @@
-import { BaseModel, belongsTo, column, hasManyThrough } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany, hasManyThrough } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 import ToolSaveTag from './save_tags.js'
-import type { BelongsTo, HasManyThrough } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, HasManyThrough } from '@adonisjs/lucid/types/relations'
 import Tag from '#tags/models/tag'
 import User from '#users/models/user'
+import ToolSaveMember from './save_member.js'
 
 export default class ToolSave extends BaseModel {
   @column({ isPrimary: true })
@@ -46,6 +47,13 @@ export default class ToolSave extends BaseModel {
     foreignKey: 'authorId',
   })
   declare author: BelongsTo<typeof User>
+
+  @hasMany(() => ToolSaveMember, {
+    localKey: 'id',
+    foreignKey: 'saveId',
+    onQuery: (query) => query.preload('user'),
+  })
+  declare members: HasMany<typeof ToolSaveMember>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

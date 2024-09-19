@@ -41,7 +41,6 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
   .tap((app) => {
     app.booting(async () => {
       await import('#start/env')
-      await import('#start/sockets')
 
       // try {
       //   await mongoose.connect(env.get('MONGO_URL'))

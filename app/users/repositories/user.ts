@@ -1,4 +1,4 @@
-import BaseRepository from '#repositories/base'
+import BaseRepository, { PaginationOptions } from '#repositories/base'
 import User from '../models/user.js'
 import Social from '#users/models/social'
 
@@ -48,5 +48,11 @@ export default class UserRepository extends BaseRepository<typeof User> {
     )
 
     return user
+  }
+
+  async search(query: Record<string, any>, options?: PaginationOptions): Promise<any> {
+    return (await super.search(query, options)).serialize({
+      fields: ['id', 'username', 'avatar_url'],
+    })
   }
 }

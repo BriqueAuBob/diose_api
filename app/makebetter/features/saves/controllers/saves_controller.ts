@@ -1,7 +1,7 @@
 import { inject } from '@adonisjs/core'
 import SaveRepository from '../repositories/save_repository.js'
 import { HttpContext } from '@adonisjs/core/http'
-import { createSaveValidator } from '../validators/save.js'
+import { createSaveValidator, updateMembersValidator } from '../validators/save.js'
 import PaginationService from '#services/pagination'
 
 @inject()
@@ -43,5 +43,14 @@ export default class SavesController {
 
   async delete({ params }: HttpContext) {
     return await this.saveRepository.delete(params.id)
+  }
+
+  async getMembers({ params }: HttpContext) {
+    return await this.saveRepository.getMembers(params.id)
+  }
+
+  async updateMembers({ request, params }: HttpContext) {
+    const payload = await request.validateUsing(updateMembersValidator)
+    return await this.saveRepository.updateMembers(params.id, payload.members)
   }
 }

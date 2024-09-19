@@ -1,3 +1,4 @@
+import server from '@adonisjs/core/services/server'
 import { Server, Socket } from 'socket.io'
 
 type ControllerMethod = [any, string]
@@ -7,7 +8,7 @@ export default class Websockets {
   private io: Server
 
   private constructor() {
-    this.io = new Server({
+    this.io = new Server(server.getNodeServer(), {
       cors: {
         origin: '*',
       },
@@ -31,12 +32,24 @@ export default class Websockets {
   }
 
   public registerEvent(socket: Socket, event: string, controllerMethod: ControllerMethod): void {
+    const controller = new controllerMethod[0]()
     socket.on(event, (data) => {
-      controllerMethod[0][controllerMethod[1]]({
+      controller[controllerMethod[1]]({
         instance: Websockets.getInstance(),
         socket,
         data,
       })
     })
   }
+
+  public addEventListener(event: string, controllerMethod: ControllerMethod): void {
+    this.io.on(event, (socket) => {
+      const controller = new controllerMethod[0]()
+      controller[controllerMethod[1]]({
+        instance: Websockets.getInstance(),
+        socket,
+      })
+    })
+  }
 }
+export type SocketMiddleware = Parameters<Websockets['io']['use']>[0]
